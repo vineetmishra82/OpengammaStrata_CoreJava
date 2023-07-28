@@ -123,7 +123,7 @@ public class Main {
 					}
 					
 					try {
-						Thread.sleep(100);
+						Thread.sleep(800);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -148,12 +148,18 @@ public class Main {
 		 
 		 System.out.println("\nResult check...\n");
 		 
-		for(int i = 0;i<finalResult.size();i++)
-		{
-			List<String> list = finalResult.get(i+1);
+		 Thread t = new Thread(() ->  {
 			
-			System.out.println("\nFor row "+(i+1)+" total results are "+list.size());
-		}
+			 for(int i = 0;i<finalResult.size();i++)
+				{
+					List<String> list = finalResult.get(i+1);
+					
+					System.out.println("\nFor row "+(i+1)+" total results are "+list.size());
+				}
+			 
+		 });
+		 
+		t.start();
 		 
 		 
 	}
