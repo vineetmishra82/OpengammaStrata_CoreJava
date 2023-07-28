@@ -130,8 +130,7 @@ public class Main {
 	        // Shutdown the executor service.
 	        executorService.shutdown();
 	        List<String> list = finalResult.get(String.valueOf(lineNo));
-			System.out.println("Processed Row " + lineNo + " for " + String.valueOf(loopSize) + " times."
-					+ " The result contains "+list.size()+" values\n");
+			System.out.println("Processed Row " + lineNo + " for " + String.valueOf(loopSize) + " times\n");
 
 			lineNo++;	
 
@@ -140,6 +139,15 @@ public class Main {
 		 System.out.printf("Time taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
 		 System.out.printf("Time taken for Entire Project with File Reading : %s ms%n", System.currentTimeMillis() - projectStartTime);
 		 
-		 System.exit(0);
+		 System.out.println("\nResult check...\n");
+		 
+		for(int i = 0;i<finalResult.size();i++)
+		{
+			List<String> list = finalResult.get(i+1);
+			
+			System.out.println("\nFor row "+(i+1)+" total results are "+list.size());
+		}
+		 
+		 
 	}
 }
