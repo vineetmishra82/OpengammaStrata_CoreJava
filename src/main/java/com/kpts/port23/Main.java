@@ -90,7 +90,10 @@ public class Main {
 		int lineNo = 1;
 		 long startTime = System.currentTimeMillis();
 		for (Map<String, String> item : itemList) {
+			final String lineNum = String.valueOf(lineNo);
+			List<String> resultList = new ArrayList<String>();
 			
+			finalResult.put(lineNum, resultList);
 			
 			Product product = new Product(item.get("SECURITY_SCHEME") + "," + item.get("SECURITY_VALUE"),
 					item.get("SECURITY_SCHEME") + "," + item.get("ISSUER_VALUE"),
@@ -102,7 +105,7 @@ public class Main {
 			double loopSize = loopCount == -1 ? Double.valueOf(item.get("Loops")) : loopCount;
 				
 			ExecutorService executorService = Executors.newFixedThreadPool(8);
-			final String lineNum = String.valueOf(lineNo);
+			
 			Runnable calculateValue = () -> {
 
 				for (int i = 0; i < loopSize; i++) {
@@ -142,26 +145,20 @@ public class Main {
 			lineNo++;	
 
 		}
-		 Thread t = new Thread(() ->  {
-				
-			 for(int i = 0;i<finalResult.size();i++)
-				{
-					List<String> list = finalResult.get(String.valueOf(i+1));
-					
-					System.out.println("\nFor row "+(i+1)+" total results are "+list.size());
-				}
-			 
-		 });
+		 System.out.println("\nResult check...\n");
 		 
-		t.start();
+			
+		 for(int i = 0;i<finalResult.size();i++)
+			{
+				List<String> list = finalResult.get(String.valueOf(i+1));
+				
+				System.out.println("\nFor row "+(i+1)+" total results are "+list.size());
+			}
 		
 		 System.out.printf("Time taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
 		 System.out.printf("Time taken for Entire Project with File Reading : %s ms%n", System.currentTimeMillis() - projectStartTime);
 		 
-		 System.out.println("\nResult check...\n");
-		 
-		
-		 
+				 
 		 
 	}
 }
