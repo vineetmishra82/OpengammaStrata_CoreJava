@@ -142,17 +142,11 @@ public class Main {
 			lineNo++;	
 
 		}
-		
-		 System.out.printf("Time taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
-		 System.out.printf("Time taken for Entire Project with File Reading : %s ms%n", System.currentTimeMillis() - projectStartTime);
-		 
-		 System.out.println("\nResult check...\n");
-		 
 		 Thread t = new Thread(() ->  {
-			
+				
 			 for(int i = 0;i<finalResult.size();i++)
 				{
-					List<String> list = finalResult.get(i+1);
+					List<String> list = finalResult.get(String.valueOf(i+1));
 					
 					System.out.println("\nFor row "+(i+1)+" total results are "+list.size());
 				}
@@ -160,6 +154,13 @@ public class Main {
 		 });
 		 
 		t.start();
+		
+		 System.out.printf("Time taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
+		 System.out.printf("Time taken for Entire Project with File Reading : %s ms%n", System.currentTimeMillis() - projectStartTime);
+		 
+		 System.out.println("\nResult check...\n");
+		 
+		
 		 
 		 
 	}
