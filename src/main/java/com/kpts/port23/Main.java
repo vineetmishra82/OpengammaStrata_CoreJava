@@ -104,41 +104,66 @@ public class Main {
 
 			double loopSize = loopCount == -1 ? Double.valueOf(item.get("Loops")) : loopCount;
 				
+			for (double i = 0; i < loopSize; i++) {
+				String value = product.calculatePresentValue();
+				
+				if(!value.equals(null))
+				{
+					List<String> list = finalResult.get(lineNum);
+					
+					if(list.equals(null))
+					{
+						list = new ArrayList<>();
+					}
+					
+					list.add(value);
+					
+					finalResult.put(lineNum, list);
+				}
+				
+//				try {
+//					Thread.sleep(800);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+										
+			}
 			ExecutorService executorService = Executors.newFixedThreadPool(8);
 			
-			Runnable calculateValue = () -> {
-
-				for (int i = 0; i < loopSize; i++) {
-					String value = product.calculatePresentValue();
-					
-					if(!value.equals(null))
-					{
-						List<String> list = finalResult.get(lineNum);
-						
-						if(list.equals(null))
-						{
-							list = new ArrayList<>();
-						}
-						
-						list.add(value);
-						
-						finalResult.put(lineNum, list);
-					}
-					
-					try {
-						Thread.sleep(800);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-											
-				}
-			};
-			
-			executorService.submit(calculateValue);
-
-	        // Shutdown the executor service.
-	        executorService.shutdown();
+//			Runnable calculateValue = () -> {
+//
+//				for (int i = 0; i < loopSize; i++) {
+//					String value = product.calculatePresentValue();
+//					
+//					if(!value.equals(null))
+//					{
+//						List<String> list = finalResult.get(lineNum);
+//						
+//						if(list.equals(null))
+//						{
+//							list = new ArrayList<>();
+//						}
+//						
+//						list.add(value);
+//						
+//						finalResult.put(lineNum, list);
+//					}
+//					
+//					try {
+//						Thread.sleep(800);
+//					} catch (InterruptedException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//											
+//				}
+//			};
+//			
+//			executorService.submit(calculateValue);
+//
+//	        // Shutdown the executor service.
+//	        executorService.shutdown();
 	        List<String> list = finalResult.get(String.valueOf(lineNo));
 			System.out.println("Processed Row " + lineNo + " for " + String.valueOf(loopSize) + " times\n");
 
