@@ -217,6 +217,9 @@ public class Product {
 	    
 	    Main.finalResult.get(rowNum).add(str);
 	    
+	    System.out.println("Result count for row "+rowNum+" is "+
+	    		Main.finalResult.get(rowNum).size());
+	    
 	   return str;
 	   
 	}
