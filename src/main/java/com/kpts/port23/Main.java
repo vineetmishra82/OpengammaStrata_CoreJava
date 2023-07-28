@@ -23,6 +23,8 @@ public class Main {
 	public static void main(String[] args) {
 		 long projectStartTime = System.currentTimeMillis();
 		 
+		 ExecutorService executorService = null;
+		 
 		 Map<String,List<String>> finalResult = new HashMap<>();
 
 		List<Map<String, String>> itemList = new ArrayList<Map<String, String>>();
@@ -104,7 +106,7 @@ public class Main {
 
 			double loopSize = loopCount == -1 ? Double.valueOf(item.get("Loops")) : loopCount;
 				
-			ExecutorService executorService = Executors.newFixedThreadPool(8);
+			executorService = Executors.newFixedThreadPool(8);
 			
 			Runnable calculateValue = () -> {
 
@@ -142,18 +144,14 @@ public class Main {
 			lineNo++;	
 
 		}
-		 System.out.println("\nResult check...\n");
-		 
-			
-		 for(int i = 0;i<finalResult.size();i++)
-			{
-				List<String> list = finalResult.get(String.valueOf(i+1));
-				
-				System.out.println("\nFor row "+(i+1)+" total results are "+list.size());
-			}
 		
-		 System.out.printf("Time taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
-		 System.out.printf("Time taken for Entire Project with File Reading : %s ms%n", System.currentTimeMillis() - projectStartTime);
+		if(executorService.isShutdown())
+		{
+			System.out.printf("Time taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
+			System.out.printf("Time taken for Entire Project with File Reading : %s ms%n", System.currentTimeMillis() - projectStartTime);
+			 
+		}
+		
 		 
 				 
 		 
