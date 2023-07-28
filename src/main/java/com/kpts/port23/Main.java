@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -17,6 +18,7 @@ public class Main {
 
 	static List<String> headers = new ArrayList<String>();
 	static double loopCount = -1;
+	static Map<String,List<String>> finalResult = new HashMap<>();
 
 	public static void main(String[] args) {
 		 long projectStartTime = System.currentTimeMillis();
@@ -86,7 +88,11 @@ public class Main {
 		int lineNo = 1;
 		 long startTime = System.currentTimeMillis();
 		for (Map<String, String> item : itemList) {
-
+			
+			final String finalNum = String.valueOf(lineNo);
+			
+			finalResult.put(finalNum, new ArrayList<String>());
+			
 			Product product = new Product(item.get("SECURITY_SCHEME") + "," + item.get("SECURITY_VALUE"),
 					item.get("SECURITY_SCHEME") + "," + item.get("ISSUER_VALUE"),
 					Long.valueOf(item.get("QUANTITY").replace("L", "")), Double.valueOf(item.get("NOTIONAL")),
@@ -94,7 +100,7 @@ public class Main {
 					item.get("SETTLEMENT"), Double.valueOf(item.get("CLEAN_PRICE")), item.get("VAL_DATE"),
 					String.valueOf(lineNo));
 
-			double loopSize = loopCount == -1 ? Integer.valueOf(item.get("Loops")) : loopCount;
+			double loopSize = loopCount == -1 ? Double.valueOf(item.get("Loops")) : loopCount;
 
 			ExecutorService executorService = Executors.newFixedThreadPool(8);
 
@@ -102,6 +108,12 @@ public class Main {
 
 				for (int i = 0; i < loopSize; i++) {
 					String value = product.calculatePresentValue();
+					
+					if(!value.equals(null))
+					{
+						finalResult.get(String.valueOf(finalNum)).add(value);
+					}
+						
 				}
 			};
 			
@@ -110,7 +122,8 @@ public class Main {
 	        // Shutdown the executor service.
 	        executorService.shutdown();
 
-			System.out.println("Processed Row " + lineNo + " for " + String.valueOf(loopSize) + " times.\n");
+			System.out.println("Processed Row " + lineNo + " for " + String.valueOf(loopSize) + " times."
+					+ " The result contains "+finalResult.get(String.valueOf(finalNum)).size()+" values\n");
 
 			lineNo++;	
 
