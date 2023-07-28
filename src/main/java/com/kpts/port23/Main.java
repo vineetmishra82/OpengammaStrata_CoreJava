@@ -92,6 +92,7 @@ public class Main {
 		int lineNo = 1;
 		 long startTime = System.currentTimeMillis();
 		for (Map<String, String> item : itemList) {
+			
 			final String lineNum = String.valueOf(lineNo);
 			List<String> resultList = new ArrayList<String>();
 			
@@ -127,7 +128,14 @@ public class Main {
 						finalResult.put(lineNum, list);
 						
 						if(i==loopSize-1)
-						System.out.println("For row "+lineNum+" list size is "+list.size());
+						System.out.println("For row "+lineNum+" result list size is "+list.size());
+						
+						if(itemList.indexOf(item)==itemList.size()-1)
+						{
+							System.out.printf("Time taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
+							System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n", System.currentTimeMillis() - projectStartTime);
+							 
+						}
 					}
 					
 									
@@ -145,15 +153,7 @@ public class Main {
 
 		}
 		
-		if(executorService.isShutdown())
-		{
-			System.out.printf("Time taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
-			System.out.printf("Time taken for Entire Project with File Reading : %s ms%n", System.currentTimeMillis() - projectStartTime);
-			 
-		}
-		
 		 
-				 
 		 
 	}
 }
