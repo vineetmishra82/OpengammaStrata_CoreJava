@@ -111,7 +111,7 @@ public class Main {
 					
 					if(!value.equals(null))
 					{
-						finalResult.get(String.valueOf(finalNum)).add(value);
+						finalResult.get(finalNum).add(value);
 					}
 						
 				}
@@ -121,9 +121,9 @@ public class Main {
 
 	        // Shutdown the executor service.
 	        executorService.shutdown();
-
+	        System.out.println("Abhi final num is "+finalNum);
 			System.out.println("Processed Row " + lineNo + " for " + String.valueOf(loopSize) + " times."
-					+ " The result contains "+finalResult.get(String.valueOf(finalNum)).size()+" values\n");
+					+ " The result contains "+finalResult.get(finalNum).size()+" values\n");
 
 			lineNo++;	
 
