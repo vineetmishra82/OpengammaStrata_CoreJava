@@ -83,7 +83,7 @@ public class Main {
 		}
 
 		int lineNo = 1;
-
+		 long startTime = System.currentTimeMillis();
 		for (Map<String, String> item : itemList) {
 
 			Product product = new Product(item.get("SECURITY_SCHEME") + "," + item.get("SECURITY_VALUE"),
@@ -111,11 +111,11 @@ public class Main {
 
 			System.out.println("Processed Row " + lineNo + " for " + loopSize + " times.\n");
 
-			lineNo++;
-
-			break;
+			lineNo++;	
 
 		}
+		
+		 System.out.printf("time taken for entire process: %s ms%n", System.currentTimeMillis() - startTime);
 
 	}
 }
