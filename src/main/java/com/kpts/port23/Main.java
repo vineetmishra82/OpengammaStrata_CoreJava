@@ -19,6 +19,7 @@ public class Main {
 	static double loopCount = -1;
 
 	public static void main(String[] args) {
+		 long projectStartTime = System.currentTimeMillis();
 
 		List<Map<String, String>> itemList = new ArrayList<Map<String, String>>();
 		System.out.println("Running strata project");
@@ -109,13 +110,15 @@ public class Main {
 	        // Shutdown the executor service.
 	        executorService.shutdown();
 
-			System.out.println("Processed Row " + lineNo + " for " + loopSize + " times.\n");
+			System.out.println("Processed Row " + lineNo + " for " + String.valueOf(loopSize) + " times.\n");
 
 			lineNo++;	
 
 		}
 		
-		 System.out.printf("time taken for entire process: %s ms%n", System.currentTimeMillis() - startTime);
-
+		 System.out.printf("Time taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
+		 System.out.printf("Time taken for Entire Project with File Reading : %s ms%n", System.currentTimeMillis() - projectStartTime);
+		 
+		 System.exit(0);
 	}
 }
