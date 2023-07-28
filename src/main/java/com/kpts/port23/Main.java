@@ -18,10 +18,12 @@ public class Main {
 
 	static List<String> headers = new ArrayList<String>();
 	static double loopCount = -1;
-	volatile static Map<String,List<String>> finalResult = new HashMap<>();
+	
 
 	public static void main(String[] args) {
 		 long projectStartTime = System.currentTimeMillis();
+		 
+		 Map<String,List<String>> finalResult = new HashMap<>();
 
 		List<Map<String, String>> itemList = new ArrayList<Map<String, String>>();
 		System.out.println("Running strata project");
@@ -89,9 +91,6 @@ public class Main {
 		 long startTime = System.currentTimeMillis();
 		for (Map<String, String> item : itemList) {
 			
-			String finalNum = String.valueOf(lineNo);
-			
-			finalResult.put(finalNum, new ArrayList<String>());
 			
 			Product product = new Product(item.get("SECURITY_SCHEME") + "," + item.get("SECURITY_VALUE"),
 					item.get("SECURITY_SCHEME") + "," + item.get("ISSUER_VALUE"),
@@ -101,14 +100,27 @@ public class Main {
 					String.valueOf(lineNo));
 
 			double loopSize = loopCount == -1 ? Double.valueOf(item.get("Loops")) : loopCount;
-
+				
 			ExecutorService executorService = Executors.newFixedThreadPool(8);
-
+			final String lineNum = String.valueOf(lineNo);
 			Runnable calculateValue = () -> {
 
 				for (int i = 0; i < loopSize; i++) {
 					String value = product.calculatePresentValue();
 					
+					if(!value.equals(null))
+					{
+						List<String> list = finalResult.get(lineNum);
+						
+						if(list.equals(null))
+						{
+							list = new ArrayList<>();
+						}
+						
+						list.add(value);
+						
+						finalResult.put(lineNum, list);
+					}
 											
 				}
 			};
@@ -117,9 +129,9 @@ public class Main {
 
 	        // Shutdown the executor service.
 	        executorService.shutdown();
-	       
+	        List<String> list = finalResult.get(String.valueOf(lineNo));
 			System.out.println("Processed Row " + lineNo + " for " + String.valueOf(loopSize) + " times."
-					+ " The result contains "+finalResult.get(finalNum).size()+" values\n");
+					+ " The result contains "+list.size()+" values\n");
 
 			lineNo++;	
 

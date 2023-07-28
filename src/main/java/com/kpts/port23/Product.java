@@ -215,10 +215,7 @@ public class Product {
 	    str+="\nComputed Product - "+computedProduct.getCurrency()+" : "+computedProduct.getAmount();
 	    str+="\nPv Payment - "+pvPayment.getCurrency()+" : "+pvPayment.getAmount();
 	    
-	    Main.finalResult.get(rowNum).add(str);
-	    
-	    System.out.println("Result count for row "+rowNum+" is "+
-	    		Main.finalResult.get(rowNum).size());
+	   
 	    
 	   return str;
 	   
