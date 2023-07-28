@@ -104,7 +104,7 @@ public class Main {
 
 			double loopSize = loopCount == -1 ? Double.valueOf(item.get("Loops")) : loopCount;
 				
-			ExecutorService executorService = Executors.newFixedThreadPool(1);
+			ExecutorService executorService = Executors.newFixedThreadPool(8);
 			
 			Runnable calculateValue = () -> {
 
@@ -124,6 +124,7 @@ public class Main {
 						
 						finalResult.put(lineNum, list);
 						
+						if(i==loopSize-1)
 						System.out.println("For row "+lineNum+" list size is "+list.size());
 					}
 					
