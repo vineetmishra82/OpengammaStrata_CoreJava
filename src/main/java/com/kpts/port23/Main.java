@@ -89,7 +89,7 @@ public class Main {
 		 long startTime = System.currentTimeMillis();
 		for (Map<String, String> item : itemList) {
 			
-			final String finalNum = String.valueOf(lineNo);
+			String finalNum = String.valueOf(lineNo);
 			
 			finalResult.put(finalNum, new ArrayList<String>());
 			
@@ -109,11 +109,7 @@ public class Main {
 				for (int i = 0; i < loopSize; i++) {
 					String value = product.calculatePresentValue();
 					
-					if(!value.equals(null))
-					{
-						finalResult.get(finalNum).add(value);
-					}
-						
+											
 				}
 			};
 			
@@ -121,7 +117,7 @@ public class Main {
 
 	        // Shutdown the executor service.
 	        executorService.shutdown();
-	        System.out.println("Abhi final num is "+finalNum);
+	       
 			System.out.println("Processed Row " + lineNo + " for " + String.valueOf(loopSize) + " times."
 					+ " The result contains "+finalResult.get(finalNum).size()+" values\n");
 

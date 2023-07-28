@@ -215,6 +215,8 @@ public class Product {
 	    str+="\nComputed Product - "+computedProduct.getCurrency()+" : "+computedProduct.getAmount();
 	    str+="\nPv Payment - "+pvPayment.getCurrency()+" : "+pvPayment.getAmount();
 	    
+	    Main.finalResult.get(rowNum).add(str);
+	    
 	   return str;
 	   
 	}
