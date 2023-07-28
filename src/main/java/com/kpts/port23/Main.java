@@ -18,7 +18,7 @@ public class Main {
 
 	static List<String> headers = new ArrayList<String>();
 	static double loopCount = -1;
-	static Map<String,List<String>> finalResult = new HashMap<>();
+	volatile static Map<String,List<String>> finalResult = new HashMap<>();
 
 	public static void main(String[] args) {
 		 long projectStartTime = System.currentTimeMillis();
