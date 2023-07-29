@@ -111,7 +111,7 @@ public class Main {
 			
 			Runnable calculateValue = () -> {
 				
-				if(lineNo==328)
+				if(lineNum.equals(String.valueOf(328)))
 				{
 					for (double i = 0; i < loopSize; i++) {
 						String value = product.calculatePresentValue();
