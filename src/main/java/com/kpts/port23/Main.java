@@ -146,6 +146,12 @@ public class Main {
 				}
 			};
 			
+			for(int i = 0;i<finalResult.size();i++)
+			{
+				List<String> result = finalResult.get((i+1));
+				System.out.println("\nFor row "+(i+1)+" result size is "+);
+			}
+			
 			executorService.submit(calculateValue);
 
 	        // Shutdown the executor service.
