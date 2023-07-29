@@ -135,6 +135,7 @@ public class Main {
 			
 				if(i==loopSize-1)
 				{
+					List<String> list = finalResult.get(lineNum);
 					System.out.println("For row "+lineNum+" result list size is "+list.size());
 					if(itemList.indexOf(item)==itemList.size()-1)
 					{
