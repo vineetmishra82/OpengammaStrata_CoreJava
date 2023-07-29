@@ -127,16 +127,16 @@ public class Main {
 						
 						finalResult.put(lineNum, list);
 						
-//						if(i==loopSize-1)
-//						{
-//							System.out.println("For row "+lineNum+" result list size is "+list.size());
-//							if(itemList.indexOf(item)==itemList.size()-1)
-//							{
-//								System.out.printf("\nTime taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
-//								System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n", System.currentTimeMillis() - projectStartTime);
-//								 
-//							}
-//						}
+						if(i==loopSize-1)
+						{
+							System.out.println("For row "+lineNum+" result list size is "+list.size());
+							if(itemList.indexOf(item)==itemList.size()-1)
+							{
+								System.out.printf("\nTime taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
+								System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n", System.currentTimeMillis() - projectStartTime);
+								 
+							}
+						}
 						
 						
 						
@@ -145,16 +145,6 @@ public class Main {
 									
 				}
 			};
-			
-			for(int i = 0;i<finalResult.size();i++)
-			{
-				List<String> result = finalResult.get((i+1));
-				if(result.equals(null))
-				{
-					result = new ArrayList<String>();
-				}
-				System.out.println("\nFor row "+(i+1)+" result size is " + result.size());
-			}
 			
 			executorService.submit(calculateValue);
 
