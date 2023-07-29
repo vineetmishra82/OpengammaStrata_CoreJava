@@ -183,9 +183,9 @@ public class Product {
 				      .resolve(REF_DATA);
 		}catch(Exception ex)
 		{
-			System.out.println("Exception happened in row "+rowNum);
+			System.out.println("Exception happened in row "+rowNum+" error - "+ex.getMessage());
 			System.out.println("\nDetails - \n"+toString());
-			System.exit(0);
+			
 		}
 		
 		
