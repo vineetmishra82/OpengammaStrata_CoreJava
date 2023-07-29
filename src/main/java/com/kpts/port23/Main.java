@@ -149,6 +149,10 @@ public class Main {
 			for(int i = 0;i<finalResult.size();i++)
 			{
 				List<String> result = finalResult.get((i+1));
+				if(result.equals(null))
+				{
+					result = new ArrayList<String>();
+				}
 				System.out.println("\nFor row "+(i+1)+" result size is " + result.size());
 			}
 			
