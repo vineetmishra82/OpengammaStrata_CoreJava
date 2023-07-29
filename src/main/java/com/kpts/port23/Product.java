@@ -164,19 +164,27 @@ public class Product {
 
 	private void CalculateProduct() {
 		
-		PRODUCT = FixedCouponBond.builder()
-			      .securityId(SECURITY_ID)
-			      .dayCount(DAY_COUNT)
-			      .fixedRate(FIXED_RATE)
-			      .legalEntityId(ISSUER_ID)
-			      .currency(EUR)
-			      .notional(NOTIONAL)
-			      .accrualSchedule(PERIOD_SCHEDULE)
-			      .settlementDateOffset(DATE_OFFSET)
-			      .yieldConvention(YIELD_CONVENTION)
-			      .exCouponPeriod(EX_COUPON)
-			      .build()
-			      .resolve(REF_DATA);
+		try {
+			PRODUCT = FixedCouponBond.builder()
+				      .securityId(SECURITY_ID)
+				      .dayCount(DAY_COUNT)
+				      .fixedRate(FIXED_RATE)
+				      .legalEntityId(ISSUER_ID)
+				      .currency(EUR)
+				      .notional(NOTIONAL)
+				      .accrualSchedule(PERIOD_SCHEDULE)
+				      .settlementDateOffset(DATE_OFFSET)
+				      .yieldConvention(YIELD_CONVENTION)
+				      .exCouponPeriod(EX_COUPON)
+				      .build()
+				      .resolve(REF_DATA);
+		}catch(Exception ex)
+		{
+			System.out.println("Exception happened in row "+rowNum);
+			System.exit(0);
+		}
+		
+		
 		
 	}
 
