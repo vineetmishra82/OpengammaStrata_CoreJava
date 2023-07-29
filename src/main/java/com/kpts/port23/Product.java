@@ -103,7 +103,8 @@ public class Product {
 			double nOTIONAL, double fIXED_RATE,
 			String sTART_DATE,
 			String eND_DATE,String settlementDate,double cleanPrice,String valDate,String rowNum) {
-		SECURITY_ID = getSecurityID(sECURITY_ID);
+		  this.rowNum = rowNum;
+		  SECURITY_ID = getSecurityID(sECURITY_ID);
 		ISSUER_ID = getLegalEntityID(iSSUER_ID);
 		QUANTITY = qUANTITY;
 		YIELD_CONVENTION  = FixedCouponBondYieldConvention.DE_BONDS;
@@ -126,13 +127,14 @@ public class Product {
 		PRODUCT_PRICER = TRADE_PRICER.getProductPricer();
 		REF_DATA = ReferenceData.standard();
 		PRICER_NOMINAL = DiscountingPaymentPricer.DEFAULT;
+		
 		CalculateProduct();
 		DIRTY_PRICE  = PRODUCT_PRICER.dirtyPriceFromCleanPrice(PRODUCT, SETTLEMENT, CLEAN_PRICE);
 		UPFRONT_PAYMENT = Payment.of(
 			      CurrencyAmount.of(EUR, -QUANTITY * NOTIONAL * DIRTY_PRICE), SETTLEMENT);
 		CalculateTrade();
 		PROVIDER  = createRatesProvider(VAL_DATE);
-		this.rowNum = rowNum;
+		
 	  }
 
 	public Product(float[] input, float[] output) {
