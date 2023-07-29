@@ -106,14 +106,12 @@ public class Main {
 					String.valueOf(lineNo));
 
 			double loopSize = loopCount == -1 ? Double.valueOf(item.get("Loops")) : loopCount;
+		
+			for (double i = 0; i < loopSize; i++) {
 				
-			executorService = Executors.newFixedThreadPool(8);
-			
-			Runnable calculateValue = () -> {
-				
-				if(lineNum.equals(String.valueOf(328)))
-				{
-					for (double i = 0; i < loopSize; i++) {
+				new Thread() {
+					
+					public void run() {
 						String value = product.calculatePresentValue();
 						
 						if(!value.equals(null))
@@ -138,23 +136,62 @@ public class Main {
 									System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n", System.currentTimeMillis() - projectStartTime);
 									 
 								}
-							}
-							
-							
-							
-						}
+							}	
 						
-										
 					}
-				}
+					}
+					
+				}.start();
+			
+			
+	//		executorService = Executors.newFixedThreadPool(8);
+			
+	//		Runnable calculateValue = () -> {
+				
+//				if(lineNum.equals(String.valueOf(328)))
+//				{
+//					for (double i = 0; i < loopSize; i++) {
+//						String value = product.calculatePresentValue();
+//						
+//						if(!value.equals(null))
+//						{
+//							List<String> list = finalResult.get(lineNum);
+//							
+//							if(list.equals(null))
+//							{
+//								list = new ArrayList<>();
+//							}
+//							
+//							list.add(value);
+//							
+//							finalResult.put(lineNum, list);
+//							
+//							if(i==loopSize-1)
+//							{
+//								System.out.println("For row "+lineNum+" result list size is "+list.size());
+//								if(itemList.indexOf(item)==itemList.size()-1)
+//								{
+//									System.out.printf("\nTime taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
+//									System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n", System.currentTimeMillis() - projectStartTime);
+//									 
+//								}
+//							}
+//							
+//							
+//							
+//						}
+//						
+//										
+//					}
+//				}
 
 			
-			};
+	//		};
 			
-			executorService.submit(calculateValue);
+	//		executorService.submit(calculateValue);
 
 	        // Shutdown the executor service.
-	        executorService.shutdown();
+	 //       executorService.shutdown();
 	        List<String> list = finalResult.get(String.valueOf(lineNo));
 			System.out.println("Processed Row " + lineNo + " for " + String.valueOf(loopSize) + " times\n");
 
