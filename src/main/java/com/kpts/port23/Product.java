@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.collect.ImmutableMap;
@@ -183,6 +184,7 @@ public class Product {
 		}catch(Exception ex)
 		{
 			System.out.println("Exception happened in row "+rowNum);
+			System.out.println("\nDetails - \n"+toString());
 			System.exit(0);
 		}
 		
@@ -260,6 +262,26 @@ public class Product {
 		    }
 		
 	}
+
+	@Override
+	public String toString() {
+		return "Product [REF_DATA="
+				+ REF_DATA + ", SECURITY_ID=" + SECURITY_ID + ", ISSUER_ID=" + ISSUER_ID + ", QUANTITY=" + QUANTITY
+				+ ", YIELD_CONVENTION=" + YIELD_CONVENTION + ", NOTIONAL=" + NOTIONAL + ", FIXED_RATE=" + FIXED_RATE
+				+ ", EUR_CALENDAR=" + EUR_CALENDAR + ", DATE_OFFSET=" + DATE_OFFSET + ", DAY_COUNT=" + DAY_COUNT
+				+ ", START_DATE=" + START_DATE + ", END_DATE=" + END_DATE + ", VAL_DATE=" + VAL_DATE + ", SETTLEMENT="
+				+ SETTLEMENT + ", BUSINESS_ADJUST=" + BUSINESS_ADJUST + ", PERIOD_SCHEDULE=" + PERIOD_SCHEDULE
+				+ ", EX_COUPON=" + EX_COUPON + ", CLEAN_PRICE=" + CLEAN_PRICE + ", TRADE_PRICER=" + TRADE_PRICER
+				+ ", PRODUCT_PRICER=" + PRODUCT_PRICER + ", PRICER_NOMINAL=" + PRICER_NOMINAL + ", PRODUCT=" + PRODUCT
+				+ ", DIRTY_PRICE=" + DIRTY_PRICE + ", UPFRONT_PAYMENT=" + UPFRONT_PAYMENT + ", TRADE=" + TRADE
+				+ ", PROVIDER=" + PROVIDER + ", INTERPOLATOR=" + INTERPOLATOR + ", NAME_REPO=" + NAME_REPO
+				+ ", METADATA_REPO=" + METADATA_REPO + ", CURVE_REPO=" + CURVE_REPO + ", GROUP_REPO=" + GROUP_REPO
+				+ ", GROUP_ISSUER=" + GROUP_ISSUER + ", NAME_ISSUER=" + NAME_ISSUER + ", METADATA_ISSUER="
+				+ METADATA_ISSUER + ", CURVE_ISSUER=" + CURVE_ISSUER + ", rowNum=" + rowNum + ", isprinted=" + isprinted
+				+ "]";
+	}
+	
+	
 	
 	 
 	  
