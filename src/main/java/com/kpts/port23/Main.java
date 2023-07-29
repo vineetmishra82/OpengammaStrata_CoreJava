@@ -110,40 +110,45 @@ public class Main {
 			executorService = Executors.newFixedThreadPool(8);
 			
 			Runnable calculateValue = () -> {
-
-				for (double i = 0; i < loopSize; i++) {
-					String value = product.calculatePresentValue();
-					
-					if(!value.equals(null))
-					{
-						List<String> list = finalResult.get(lineNum);
+				
+				if(lineNo==328)
+				{
+					for (double i = 0; i < loopSize; i++) {
+						String value = product.calculatePresentValue();
 						
-						if(list.equals(null))
+						if(!value.equals(null))
 						{
-							list = new ArrayList<>();
-						}
-						
-						list.add(value);
-						
-						finalResult.put(lineNum, list);
-						
-						if(i==loopSize-1)
-						{
-							System.out.println("For row "+lineNum+" result list size is "+list.size());
-							if(itemList.indexOf(item)==itemList.size()-1)
+							List<String> list = finalResult.get(lineNum);
+							
+							if(list.equals(null))
 							{
-								System.out.printf("\nTime taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
-								System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n", System.currentTimeMillis() - projectStartTime);
-								 
+								list = new ArrayList<>();
 							}
+							
+							list.add(value);
+							
+							finalResult.put(lineNum, list);
+							
+							if(i==loopSize-1)
+							{
+								System.out.println("For row "+lineNum+" result list size is "+list.size());
+								if(itemList.indexOf(item)==itemList.size()-1)
+								{
+									System.out.printf("\nTime taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
+									System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n", System.currentTimeMillis() - projectStartTime);
+									 
+								}
+							}
+							
+							
+							
 						}
 						
-						
-						
+										
 					}
-					
-									
 				}
+
+			
 			};
 			
 			executorService.submit(calculateValue);
