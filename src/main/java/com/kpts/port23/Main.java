@@ -130,7 +130,7 @@ public class Main {
 						if(i==loopSize-1)
 						{
 							System.out.println("For row "+lineNum+" result list size is "+list.size());
-							if(itemList.indexOf(item)==itemList.size()-1)
+							if(itemList.indexOf(item)==0)
 							{
 								System.out.printf("\nTime taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
 								System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n", System.currentTimeMillis() - projectStartTime);
@@ -154,7 +154,7 @@ public class Main {
 			System.out.println("Processed Row " + lineNo + " for " + String.valueOf(loopSize) + " times\n");
 
 			lineNo++;	
-
+			break ;
 		}
 		
 		 
