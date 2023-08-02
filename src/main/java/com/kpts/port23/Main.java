@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -47,8 +48,10 @@ public class Main {
 
 			String line = "";
 			int count = 0;
+			
+			readLines:
 			while ((line = buffReader.readLine()) != null) {
-				String[] values = line.split(",");
+				String[] values = line.split(",");						
 
 				if (count == 0) {
 					for (String string : values) {
@@ -64,7 +67,24 @@ public class Main {
 					Map<String, String> item = new TreeMap<String, String>();
 
 					item.put("RowNo", String.valueOf(count));
-
+					
+					//Checking empty line
+					
+					int blankCount = 0;
+					for (String string : values) {
+						
+						if(string.equals(""))
+						{
+							blankCount++;
+						}
+					}
+					
+					if(blankCount >= headers.size())
+					{
+						break readLines;
+					}
+					
+					
 					for (int i = 0; i < headers.size(); i++) {
 						item.put(headers.get(i), values[i]);
 					}
@@ -76,6 +96,19 @@ public class Main {
 
 			}
 			buffReader.close();
+			
+			System.out.println("\nTotal rows are - "+itemList.size());
+			
+			Scanner scan = new Scanner(System.in);
+			
+			System.out.println("\nContinue ? - ");
+			
+			String response = scan.nextLine();
+			
+			if(response.toUpperCase().equals("N"))
+			{
+				System.exit(0);
+			}
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -91,6 +124,11 @@ public class Main {
 		int lineNo = 1;
 		 long startTime = System.currentTimeMillis();
 		for (Map<String, String> item : itemList) {
+			
+			if(itemList.indexOf(item)>=300)
+			{
+				break;
+			}
 			
 			final String lineNum = String.valueOf(lineNo);
 			List<String> resultList = new ArrayList<String>();
