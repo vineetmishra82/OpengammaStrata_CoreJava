@@ -175,12 +175,7 @@ public class Main {
 				{
 					List<String> list = finalResult.get(lineNum);
 					System.out.println("For row "+lineNum+" result list size is "+list.size());
-					if(itemList.indexOf(item)==itemList.size()-1)
-					{
-						System.out.printf("\nTime taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
-						System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n", System.currentTimeMillis() - projectStartTime);
-						 
-					}
+					
 				}
 	//		executorService = Executors.newFixedThreadPool(8);
 			
@@ -230,16 +225,25 @@ public class Main {
 
 	        // Shutdown the executor service.
 	 //       executorService.shutdown();
-	        List<String> list = finalResult.get(String.valueOf(lineNo));
-			System.out.println("Processed Row " + lineNo + " for " + String.valueOf(loopSize) + " times\n");
-
-			lineNo++;	
+	       
 			
 		}
 		
-		 
+			 List<String> list = finalResult.get(String.valueOf(lineNo));
+				System.out.println("Processed Row " + lineNo + " for " + String.valueOf(loopSize) + " times\n");
+
+				lineNo++;	
+				
+				if(itemList.indexOf(item)==itemList.size()-1)
+				{
+					System.out.printf("\nTime taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
+					System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n", System.currentTimeMillis() - projectStartTime);
+					 
+				}
 		 
 	}
+		
+		
 }
 	
 }
