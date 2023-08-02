@@ -164,7 +164,16 @@ scan.close();
 				if(lineNum.equals(String.valueOf(328)))
 				{
 					for (double i = 0; i < loopSize; i++) {
-						String value = product.calculatePresentValue();
+						
+						
+						String value = "";
+						
+						try {
+							value = product.calculatePresentValue();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							continue;
+						}
 						
 						if(!value.equals(null))
 						{
