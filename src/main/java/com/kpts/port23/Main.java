@@ -21,6 +21,7 @@ public class Main {
 	static double loopCount = -1;
 
 	public static void main(String[] args) {
+		Scanner scan = new Scanner(System.in);
 		 long projectStartTime = System.currentTimeMillis();
 		 
 		 ExecutorService executorService = null;
@@ -99,9 +100,7 @@ public class Main {
 			
 			System.out.println("\nTotal rows are - "+itemList.size());
 			
-			Scanner scan = new Scanner(System.in);
-			
-			System.out.println("\nContinue ? - ");
+			System.out.print("\nContinue ? - ");
 			
 			String response = scan.nextLine();
 			
@@ -109,6 +108,10 @@ public class Main {
 			{
 				System.exit(0);
 			}
+			
+			
+			
+					
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -119,6 +122,20 @@ public class Main {
 			System.out.println("File reading error - " + e.getLocalizedMessage());
 		} catch (NumberFormatException e) {
 			loopCount = -1;
+		}
+		
+		int threadCount = 8;
+		
+		System.out.print("\nNo of threads - ");
+		
+		try {
+			threadCount = Integer.parseInt(scan.nextLine());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("Thread count is 8 only as u entered wrong");
+		}
+		finally {
+scan.close();
 		}
 
 		int lineNo = 1;
@@ -144,11 +161,13 @@ public class Main {
 
 			double loopSize = loopCount == -1 ? Double.valueOf(item.get("Loops")) : loopCount;
 		
-			for (double i = 0; i < loopSize; i++) {
+			executorService = Executors.newFixedThreadPool(threadCount);
+			
+			Runnable calculateValue = () -> {
 				
-				new Thread() {
-					
-					public void run() {
+				if(lineNum.equals(String.valueOf(328)))
+				{
+					for (double i = 0; i < loopSize; i++) {
 						String value = product.calculatePresentValue();
 						
 						if(!value.equals(null))
@@ -164,71 +183,33 @@ public class Main {
 							
 							finalResult.put(lineNum, list);
 							
-								
+							if(i==loopSize-1)
+							{
+								System.out.println("For row "+lineNum+" result list size is "+list.size());
+								if(itemList.indexOf(item)==itemList.size()-1)
+								{
+									System.out.printf("\nTime taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
+									System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n", System.currentTimeMillis() - projectStartTime);
+									 
+								}
+							}
+							
+							
+							
+						}
 						
+										
 					}
-					}
-					
-				}.start();
-			
-				if(i==loopSize-1)
-				{
-					List<String> list = finalResult.get(lineNum);
-					System.out.println("For row "+lineNum+" result list size is "+list.size());
-					
 				}
-	//		executorService = Executors.newFixedThreadPool(8);
-			
-	//		Runnable calculateValue = () -> {
-				
-//				if(lineNum.equals(String.valueOf(328)))
-//				{
-//					for (double i = 0; i < loopSize; i++) {
-//						String value = product.calculatePresentValue();
-//						
-//						if(!value.equals(null))
-//						{
-//							List<String> list = finalResult.get(lineNum);
-//							
-//							if(list.equals(null))
-//							{
-//								list = new ArrayList<>();
-//							}
-//							
-//							list.add(value);
-//							
-//							finalResult.put(lineNum, list);
-//							
-//							if(i==loopSize-1)
-//							{
-//								System.out.println("For row "+lineNum+" result list size is "+list.size());
-//								if(itemList.indexOf(item)==itemList.size()-1)
-//								{
-//									System.out.printf("\nTime taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
-//									System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n", System.currentTimeMillis() - projectStartTime);
-//									 
-//								}
-//							}
-//							
-//							
-//							
-//						}
-//						
-//										
-//					}
-//				}
 
 			
-	//		};
+			};
 			
-	//		executorService.submit(calculateValue);
+			executorService.submit(calculateValue);
 
 	        // Shutdown the executor service.
-	 //       executorService.shutdown();
-	       
+			executorService.shutdown();
 			
-		}
-		
 			 List<String> list = finalResult.get(String.valueOf(lineNo));
 				System.out.println("Processed Row " + lineNo + " for " + String.valueOf(loopSize) + " times\n");
 
@@ -240,10 +221,14 @@ public class Main {
 					System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n", System.currentTimeMillis() - projectStartTime);
 					 
 				}
-		 
+	       
+			
+		}
+		
+			
+		
 	}
 		
 		
 }
 	
-}
