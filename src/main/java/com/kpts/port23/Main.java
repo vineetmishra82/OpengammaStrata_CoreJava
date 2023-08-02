@@ -142,11 +142,7 @@ scan.close();
 		 long startTime = System.currentTimeMillis();
 		for (Map<String, String> item : itemList) {
 			
-			if(itemList.indexOf(item)>=300)
-			{
-				break;
-			}
-			
+						
 			final String lineNum = String.valueOf(lineNo);
 			List<String> resultList = new ArrayList<String>();
 			
