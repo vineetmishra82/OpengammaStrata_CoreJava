@@ -165,13 +165,11 @@ scan.close();
 		
 			executorService = Executors.newFixedThreadPool(threadCount);
 			
+					
 			Runnable calculateValue = () -> {
 				
-				if(lineNum.equals(String.valueOf(328)))
-				{
 					for (double i = 0; i < loopSize; i++) {
-						
-						
+									
 						String value = "";
 						
 						try {
@@ -182,7 +180,7 @@ scan.close();
 						}
 						
 										
-						if(!value.equals(""))
+						if(value.length()>0)
 						{
 							List<String> list = finalResult.get(lineNum);
 							
@@ -213,7 +211,7 @@ scan.close();
 						
 										
 					}
-				}
+		
 
 			
 			};
@@ -223,7 +221,7 @@ scan.close();
 	        // Shutdown the executor service.
 			executorService.shutdown();
 			
-		
+				
 				System.out.println("Processed Row " + lineNo + " for " + String.valueOf(loopSize) + " times\n");
 
 				lineNo++;	
@@ -240,11 +238,11 @@ scan.close();
 		
 		//Checking final result
 		
-		for (Entry<String, List<String>> map : finalResult.entrySet()) {
-			
-			System.out.println("For row "+map.getKey()+" result size is "+map.getValue().size());
-			
-		}	
+//		for (Entry<String, List<String>> map : finalResult.entrySet()) {
+//			
+//			System.out.println("For row "+map.getKey()+" result size is "+map.getValue().size());
+//			
+//		}	
 		
 		System.out.printf("\nTime taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
 		System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n", System.currentTimeMillis() - projectStartTime);
