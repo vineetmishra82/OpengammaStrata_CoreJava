@@ -180,7 +180,7 @@ scan.close();
 							continue;
 						}
 						
-						if(!value.equals(null))
+						if(!value.equals(""))
 						{
 							List<String> list = finalResult.get(lineNum);
 							
@@ -202,10 +202,12 @@ scan.close();
 									System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n", System.currentTimeMillis() - projectStartTime);
 									 
 								}
-							}
+							}						
 							
+						}
+						else {
 							
-							
+							System.out.println(" For row "+lineNum+" iteration "+i+" value was "+value);
 						}
 						
 										
@@ -225,12 +227,12 @@ scan.close();
 
 				lineNo++;	
 				
-				if(itemList.indexOf(item)==itemList.size()-1)
-				{
-					System.out.printf("\nTime taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
-					System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n", System.currentTimeMillis() - projectStartTime);
-					 
-				}
+//				if(itemList.indexOf(item)==itemList.size()-1)
+//				{
+//					System.out.printf("\nTime taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
+//					System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n", System.currentTimeMillis() - projectStartTime);
+//					 
+//				}
 	       
 			
 		}
