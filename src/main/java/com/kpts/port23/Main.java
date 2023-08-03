@@ -180,6 +180,8 @@ scan.close();
 							continue;
 						}
 						
+						System.out.println("value is "+value);
+						
 						if(!value.equals(""))
 						{
 							List<String> list = finalResult.get(lineNum);
