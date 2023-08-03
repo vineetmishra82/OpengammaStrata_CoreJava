@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.concurrent.ExecutorService;
@@ -180,8 +181,7 @@ scan.close();
 							continue;
 						}
 						
-						System.out.println("value is "+value);
-						
+										
 						if(!value.equals(""))
 						{
 							List<String> list = finalResult.get(lineNum);
@@ -200,8 +200,7 @@ scan.close();
 								System.out.println("For row "+lineNum+" result list size is "+list.size());
 								if(itemList.indexOf(item)==itemList.size()-1)
 								{
-									System.out.printf("\nTime taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
-									System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n", System.currentTimeMillis() - projectStartTime);
+								
 									 
 								}
 							}						
@@ -224,7 +223,7 @@ scan.close();
 	        // Shutdown the executor service.
 			executorService.shutdown();
 			
-			 List<String> list = finalResult.get(String.valueOf(lineNo));
+		
 				System.out.println("Processed Row " + lineNo + " for " + String.valueOf(loopSize) + " times\n");
 
 				lineNo++;	
@@ -239,7 +238,16 @@ scan.close();
 			
 		}
 		
+		//Checking final result
+		
+		for (Entry<String, List<String>> map : finalResult.entrySet()) {
 			
+			System.out.println("For row "+map.getKey()+" result size is "+map.getValue().size());
+			
+		}	
+		
+		System.out.printf("\nTime taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
+		System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n", System.currentTimeMillis() - projectStartTime);
 		
 	}
 		
