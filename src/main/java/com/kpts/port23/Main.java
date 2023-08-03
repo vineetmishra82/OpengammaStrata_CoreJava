@@ -50,9 +50,25 @@ public class Main {
 			String line = "";
 			int count = 0;
 			
+			int noOfRows = -1;
+			
+			System.out.print("\nNo of rows to read - ");
+			
+			try {
+				noOfRows = Integer.parseInt(scan.nextLine());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				System.out.println("All rows will be read as u entered wrong");
+			}
+			
 			readLines:
 			while ((line = buffReader.readLine()) != null) {
-				String[] values = line.split(",");						
+				String[] values = line.split(",");		
+				
+				if(count == noOfRows)
+				{
+					break readLines;
+				}
 
 				if (count == 0) {
 					for (String string : values) {
@@ -100,18 +116,7 @@ public class Main {
 			
 			System.out.println("\nTotal rows are - "+itemList.size());
 			
-			System.out.print("\nContinue ? - ");
 			
-			String response = scan.nextLine();
-			
-			if(response.toUpperCase().equals("N"))
-			{
-				System.exit(0);
-			}
-			
-			
-			
-					
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
