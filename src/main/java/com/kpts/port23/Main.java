@@ -141,7 +141,7 @@ public class Main {
 			System.out.println("Thread count is 8 only as u entered wrong");
 		}
 		finally {
-scan.close();
+				scan.close();
 		}
 
 		int lineNo = 1;
@@ -165,77 +165,40 @@ scan.close();
 		
 			executorService = Executors.newFixedThreadPool(threadCount);
 			
-					
-			Runnable calculateValue = () -> {
+			for(double i = 0;i<loopSize;i++)
+			{
 				
-					for (double i = 0; i < loopSize; i++) {
-									
-						String value = "";
+				executorService.execute(() -> {
+					
+					String value = product.calculatePresentValue();
+					
+					synchronized (finalResult) {
 						
-						try {
-							value = product.calculatePresentValue();
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							continue;
-						}
+						List<String> list = finalResult.get(lineNum);
+						list.add(value);
 						
-										
-						if(value.length()>0)
-						{
-							List<String> list = finalResult.get(lineNum);
-							
-							if(list.equals(null))
-							{
-								list = new ArrayList<>();
-							}
-							
-							list.add(value);
-							
-							finalResult.put(lineNum, list);
-							
-										
-							
-						}
-						else {
-							
-							System.out.println(" For row "+lineNum+" iteration "+i+" value was "+value);
-						}
-						
-										
+						finalResult.put(lineNum, list);
 					}
+					
+				});
+				
+			}
 		
-
-			
-			};
-			
-			executorService.submit(calculateValue);
-
-	        // Shutdown the executor service.
+			// Shutdown the executor service.
 			executorService.shutdown();
 			
+			while(!executorService.isTerminated())
+			{
 				
-				System.out.println("Processed Row " + lineNo + " for " + String.valueOf(loopSize) + " times\n");
-
-				lineNo++;	
+			}
 				
-//				if(itemList.indexOf(item)==itemList.size()-1)
-//				{
-//					System.out.printf("\nTime taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
-//					System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n", System.currentTimeMillis() - projectStartTime);
-//					 
-//				}
-	       
+		System.out.println("Processed Row " + lineNo + " for " + String.valueOf(loopSize) + " times and result size is "+finalResult.get(lineNum).size());
+		lineNo++;	
+				
 			
 		}
 		
-		//Checking final result
-		
-		for (Entry<String, List<String>> map : finalResult.entrySet()) {
-			
-			System.out.println("For row "+map.getKey()+" result size is "+map.getValue().size());
-			
-		}	
-		
+				
 		System.out.printf("\nTime taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
 		System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n", System.currentTimeMillis() - projectStartTime);
 		

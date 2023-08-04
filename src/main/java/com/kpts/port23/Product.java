@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import com.google.common.collect.ImmutableMap;
 import com.opengamma.strata.basics.ReferenceData;
@@ -51,7 +52,7 @@ import com.opengamma.strata.product.bond.ResolvedFixedCouponBond;
 import com.opengamma.strata.product.bond.ResolvedFixedCouponBondSettlement;
 import com.opengamma.strata.product.bond.ResolvedFixedCouponBondTrade;
 
-public class Product {
+public class Product  {
 
 	 private float[] input;
 	    private float[] output;
@@ -280,8 +281,7 @@ public class Product {
 				+ METADATA_ISSUER + ", CURVE_ISSUER=" + CURVE_ISSUER + ", rowNum=" + rowNum + ", isprinted=" + isprinted
 				+ "]";
 	}
-	
-	
+
 	
 	 
 	  
