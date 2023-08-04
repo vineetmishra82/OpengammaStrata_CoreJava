@@ -166,9 +166,7 @@ public class Main {
 			executorService = Executors.newFixedThreadPool(threadCount);
 						
 					
-			Runnable calculateValue = () -> {
-				
-					
+			Runnable calculateValue = () -> {				
 									
 						String value = "";
 						
@@ -176,7 +174,7 @@ public class Main {
 							value = product.calculatePresentValue();
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
-							continue;
+							
 						}
 						
 						if(value.length()>0)
