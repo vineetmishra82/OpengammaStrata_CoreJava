@@ -201,49 +201,56 @@ public class Main {
 			
 			for (double i = 0; i < loopSize; i++) {
 				
-				executorService.execute(() -> {
-					String value = "";
+				
+				Runnable runTask = new Runnable() {
 					
-					try {
-						value = product.calculatePresentValue();
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
+					@Override
+					public void run() {
+						String value = "";
 						
-					}
-					
-					if(value.length()>0)
-					{
-						synchronized (finalResult) 
-						{
-							List<String> list = finalResult.get(lineNum);
-							
-							if(list.equals(null))
-							{
-								list = new ArrayList<>();
-							}
-							
-							list.add(value);
-							
-							finalResult.put(lineNum, list);
-							
-										
+						try {
+							value = product.calculatePresentValue();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
 							
 						}
+						
+						if(value.length()>0)
+						{
+							synchronized (finalResult) 
+							{
+								List<String> list = finalResult.get(lineNum);
+								
+								if(list.equals(null))
+								{
+									list = new ArrayList<>();
+								}
+								
+								list.add(value);
+								
+								finalResult.put(lineNum, list);
+								
+											
+								
+							}
+						}
+						
 					}
-				});
-
-		        // Shutdown the executor service.
-				executorService.shutdown();
+				};
 				
+				executorService.submit(runTask);
+				
+				executorService.shutdown();
+												
 				while(!executorService.isTerminated())
 				{
 					
 				}
 				
-					
-				System.out.println("Processed Row " + lineNo + " for " + String.valueOf(loopSize) + " times with result size "+finalResult.get(lineNum).size()+"\n");
 				
 			}
+			
+			System.out.println("Processed Row " + lineNo + " for " + String.valueOf(loopSize) + " times with result size "+finalResult.get(lineNum).size()+"\n");
 			
 			
 
