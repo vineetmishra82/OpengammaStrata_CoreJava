@@ -164,17 +164,17 @@ public class Main {
 						
 			List<Callable<String>> tasks = new ArrayList<>();
 			
+			Product product = new Product(item.get("SECURITY_SCHEME") + "," + item.get("SECURITY_VALUE"),
+					item.get("SECURITY_SCHEME") + "," + item.get("ISSUER_VALUE"),
+					Long.valueOf(item.get("QUANTITY").replace("L", "")), Double.valueOf(item.get("NOTIONAL")),
+					Double.valueOf(item.get("FIXED_RATE")), item.get("START_DATE"), item.get("END_DATE"),
+					item.get("SETTLEMENT"), Double.valueOf(item.get("CLEAN_PRICE")), item.get("VAL_DATE"),
+					String.valueOf(lineNo));
+        	
 			
 	        for (double i = 0; i < loopSize; i++) {
 	        
-	        	Product product = new Product(item.get("SECURITY_SCHEME") + "," + item.get("SECURITY_VALUE"),
-						item.get("SECURITY_SCHEME") + "," + item.get("ISSUER_VALUE"),
-						Long.valueOf(item.get("QUANTITY").replace("L", "")), Double.valueOf(item.get("NOTIONAL")),
-						Double.valueOf(item.get("FIXED_RATE")), item.get("START_DATE"), item.get("END_DATE"),
-						item.get("SETTLEMENT"), Double.valueOf(item.get("CLEAN_PRICE")), item.get("VAL_DATE"),
-						String.valueOf(lineNo));
-	        	
-	        	
+	        		
 	        	tasks.add(() -> product.calculatePresentValue());
 	        }		
 	        
@@ -182,14 +182,14 @@ public class Main {
 			try {
 				futures = executorService.invokeAll(tasks);
 				
-				for (Future<String> future : futures) {
-		            String result = future.get();
-				    synchronized (finalResult) {
-		                
-		                finalResult.get(lineNum).add(result);
-		            }
-		        }
-			} catch (InterruptedException | ExecutionException e1) {
+//				for (Future<String> future : futures) {
+//		            String result = future.get();
+//				    synchronized (finalResult) {
+//		                
+//		                finalResult.get(lineNum).add(result);
+//		            }
+//		        }
+			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}			
