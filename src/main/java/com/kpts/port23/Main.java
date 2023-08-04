@@ -156,13 +156,7 @@ public class Main {
 			List<String> resultList = new ArrayList<String>();
 			
 			finalResult.put(lineNum, resultList);
-			
-			Product product = new Product(item.get("SECURITY_SCHEME") + "," + item.get("SECURITY_VALUE"),
-					item.get("SECURITY_SCHEME") + "," + item.get("ISSUER_VALUE"),
-					Long.valueOf(item.get("QUANTITY").replace("L", "")), Double.valueOf(item.get("NOTIONAL")),
-					Double.valueOf(item.get("FIXED_RATE")), item.get("START_DATE"), item.get("END_DATE"),
-					item.get("SETTLEMENT"), Double.valueOf(item.get("CLEAN_PRICE")), item.get("VAL_DATE"),
-					String.valueOf(lineNo));
+					
 
 			double loopSize = loopCount == -1 ? Double.valueOf(item.get("Loops")) : loopCount;
 		
@@ -172,7 +166,16 @@ public class Main {
 			
 			
 	        for (double i = 0; i < loopSize; i++) {
-	            tasks.add(() -> product.calculatePresentValue());
+	        
+	        	Product product = new Product(item.get("SECURITY_SCHEME") + "," + item.get("SECURITY_VALUE"),
+						item.get("SECURITY_SCHEME") + "," + item.get("ISSUER_VALUE"),
+						Long.valueOf(item.get("QUANTITY").replace("L", "")), Double.valueOf(item.get("NOTIONAL")),
+						Double.valueOf(item.get("FIXED_RATE")), item.get("START_DATE"), item.get("END_DATE"),
+						item.get("SETTLEMENT"), Double.valueOf(item.get("CLEAN_PRICE")), item.get("VAL_DATE"),
+						String.valueOf(lineNo));
+	        	
+	        	
+	        	tasks.add(() -> product.calculatePresentValue());
 	        }		
 	        
 	        List<Future<String>> futures;
