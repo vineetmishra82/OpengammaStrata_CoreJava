@@ -13,8 +13,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.TreeMap;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class Main {
 
@@ -165,53 +168,34 @@ public class Main {
 		
 			executorService = Executors.newFixedThreadPool(threadCount);
 						
-					
-			Runnable calculateValue = () -> {				
-									
-						String value = "";
-						
-						try {
-							value = product.calculatePresentValue();
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							
-						}
-						
-						if(value.length()>0)
-						{
-							synchronized (finalResult) 
-							{
-								List<String> list = finalResult.get(lineNum);
-								
-								if(list.equals(null))
-								{
-									list = new ArrayList<>();
-								}
-								
-								list.add(value);
-								
-								finalResult.put(lineNum, list);
-								
-											
-								
-							}
-						}
-							
-			};
+			List<Callable<String>> tasks = new ArrayList<>();
 			
-			for (double i = 0; i < loopSize; i++) {
+			
+	        for (double i = 0; i < loopSize; i++) {
+	            tasks.add(() -> product.calculatePresentValue());
+	        }		
+	        
+	        List<Future<String>> futures;
+			try {
+				futures = executorService.invokeAll(tasks);
 				
-				executorService.submit(calculateValue);
-				
-				executorService.shutdown();
-												
-				while(!executorService.isTerminated())
-				{
-					
-				}
-				
-				
-			}
+				for (Future<String> future : futures) {
+		            String result = future.get();
+				    synchronized (finalResult) {
+		                
+		                finalResult.get(lineNum).add(result);
+		            }
+		        }
+			} catch (InterruptedException | ExecutionException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}			
+	        
+	        
+	        // Shutdown the thread pool
+	        executorService.shutdown();
+			
+			
 			
 			System.out.println("Processed Row " + lineNo + " for " + String.valueOf(loopSize) + " times with result size "+finalResult.get(lineNum).size()+"\n");
 			
