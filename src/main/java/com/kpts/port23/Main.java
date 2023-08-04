@@ -172,13 +172,11 @@ public class Main {
 					
 					String value = product.calculatePresentValue();
 					
-					synchronized (finalResult) {
+					List<String> list = finalResult.get(lineNum);
+					list.add(value);
 						
-						List<String> list = finalResult.get(lineNum);
-						list.add(value);
-						
-						finalResult.put(lineNum, list);
-					}
+					finalResult.put(lineNum, list);
+					
 					
 				});
 				
