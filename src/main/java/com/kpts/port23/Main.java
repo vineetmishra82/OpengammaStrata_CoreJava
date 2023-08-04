@@ -198,6 +198,10 @@ public class Main {
 	        // Shutdown the thread pool
 	        executorService.shutdown();
 			
+	        while(!executorService.isTerminated())
+	        {
+	        	
+	        }
 			
 			
 			System.out.println("Processed Row " + lineNo + " for " + String.valueOf(loopSize) + " times with result size "+finalResult.get(lineNum).size()+"\n");
