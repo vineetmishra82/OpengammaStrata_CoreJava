@@ -165,40 +165,71 @@ public class Main {
 		
 			executorService = Executors.newFixedThreadPool(threadCount);
 			
-			for(double i = 0;i<loopSize;i++)
-			{
+					
+			Runnable calculateValue = () -> {
 				
-				executorService.execute(() -> {
-					
-					String value = product.calculatePresentValue();
-					
-					synchronized (finalResult) {
+					for (double i = 0; i < loopSize; i++) {
+									
+						String value = "";
 						
-						List<String> list = finalResult.get(lineNum);
-						list.add(value);
+						try {
+							value = product.calculatePresentValue();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							continue;
+						}
 						
-						finalResult.put(lineNum, list);
+						if(value.length()>0)
+						{
+							synchronized (finalResult) 
+							{
+								List<String> list = finalResult.get(lineNum);
+								
+								if(list.equals(null))
+								{
+									list = new ArrayList<>();
+								}
+								
+								list.add(value);
+								
+								finalResult.put(lineNum, list);
+								
+											
+								
+							}
+						}
+										
+						
+												
+										
 					}
-					
-				});
-				
-			}
 		
-			// Shutdown the executor service.
+
+			
+			};
+			
+			executorService.submit(calculateValue);
+
+	        // Shutdown the executor service.
 			executorService.shutdown();
 			
 			while(!executorService.isTerminated())
 			{
 				
 			}
+			
 				
-		System.out.println("Processed Row " + lineNo + " for " + String.valueOf(loopSize) + " times and result size is "+finalResult.get(lineNum).size());
-		lineNo++;	
+				System.out.println("Processed Row " + lineNo + " for " + String.valueOf(loopSize) + " times with result size "+finalResult.get(lineNum).size()+"\n");
+
+				lineNo++;	
 				
+      
 			
 		}
 		
-				
+		
+		
+		
 		System.out.printf("\nTime taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
 		System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n", System.currentTimeMillis() - projectStartTime);
 		
