@@ -164,11 +164,11 @@ public class Main {
 			double loopSize = loopCount == -1 ? Double.valueOf(item.get("Loops")) : loopCount;
 		
 			executorService = Executors.newFixedThreadPool(threadCount);
-			
+						
 					
 			Runnable calculateValue = () -> {
 				
-					for (double i = 0; i < loopSize; i++) {
+					
 									
 						String value = "";
 						
@@ -198,28 +198,27 @@ public class Main {
 								
 							}
 						}
-										
-						
-												
-										
-					}
-		
-
-			
+							
 			};
 			
-			executorService.submit(calculateValue);
+			for (double i = 0; i < loopSize; i++) {
+				
+				executorService.submit(calculateValue);
 
-	        // Shutdown the executor service.
-			executorService.shutdown();
-			
-			while(!executorService.isTerminated())
-			{
+		        // Shutdown the executor service.
+				executorService.shutdown();
+				
+				while(!executorService.isTerminated())
+				{
+					
+				}
+				
+					
+				System.out.println("Processed Row " + lineNo + " for " + String.valueOf(loopSize) + " times with result size "+finalResult.get(lineNum).size()+"\n");
 				
 			}
 			
-				
-				System.out.println("Processed Row " + lineNo + " for " + String.valueOf(loopSize) + " times with result size "+finalResult.get(lineNum).size()+"\n");
+			
 
 				lineNo++;	
 				
