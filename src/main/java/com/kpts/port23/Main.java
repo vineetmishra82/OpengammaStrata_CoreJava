@@ -201,7 +201,36 @@ public class Main {
 			
 			for (double i = 0; i < loopSize; i++) {
 				
-				executorService.submit(calculateValue);
+				executorService.execute(() -> {
+					String value = "";
+					
+					try {
+						value = product.calculatePresentValue();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						
+					}
+					
+					if(value.length()>0)
+					{
+						synchronized (finalResult) 
+						{
+							List<String> list = finalResult.get(lineNum);
+							
+							if(list.equals(null))
+							{
+								list = new ArrayList<>();
+							}
+							
+							list.add(value);
+							
+							finalResult.put(lineNum, list);
+							
+										
+							
+						}
+					}
+				});
 
 		        // Shutdown the executor service.
 				executorService.shutdown();
