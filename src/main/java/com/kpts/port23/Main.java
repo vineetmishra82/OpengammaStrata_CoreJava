@@ -178,9 +178,9 @@ public class Main {
 	        	tasks.add(() -> product.calculatePresentValue());
 	        }		
 	        
-	        List<Future<String>> futures;
-			try {
-				futures = executorService.invokeAll(tasks);
+//	        List<Future<String>> futures;
+//			try {
+//				futures = executorService.invokeAll(tasks);
 				
 //				for (Future<String> future : futures) {
 //		            String result = future.get();
@@ -188,11 +188,11 @@ public class Main {
 //		                
 //		                finalResult.get(lineNum).add(result);
 //		            }
-//		        }
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}			
+////		        }
+//			} catch (InterruptedException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}			
 	        
 	        
 	        // Shutdown the thread pool
