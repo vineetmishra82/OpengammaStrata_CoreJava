@@ -14,6 +14,7 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -32,6 +33,8 @@ public class Main {
 		ExecutorService executorService = null;
 
 		Map<String, List<StringBuilder>> finalResult = new HashMap<>();
+		
+		  CountDownLatch latch = new CountDownLatch(10);
 
 		List<Map<String, String>> itemList = new ArrayList<Map<String, String>>();
 		System.out.println("Running strata project");
@@ -167,11 +170,12 @@ public class Main {
 
 						resultList.add(product.calculatePresentValue());
 					}
-					
+
 					finalResult.put(lineNum, resultList);
+					latch.countDown();
 				}
 			};
-			
+
 			executorService.submit(calculate);
 //
 //			System.out.println("Processed Row " + lineNo + " for " + String.format("%.0f", loopSize)
@@ -180,18 +184,21 @@ public class Main {
 			lineNo++;
 
 		}
-		
-		 executorService.shutdown();
 
-	       while(!executorService.isTerminated()) {}
-	       
-	       
-	     //checking results
-	       
-	    for (int i = 0;i<finalResult.size();i++) {
-			
-	    	System.out.println("\nFor row "+(i+1)+" the answer size is "+finalResult.get((i+1)).size());
-		}   
+		executorService.shutdown();
+
+		try {
+			latch.await();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// checking results
+
+		for (int i = 0; i < finalResult.size(); i++) {
+
+			System.out.println("\nFor row " + (i + 1) + " the answer size is " + finalResult.get((i + 1)).size());
+		}
 
 		System.out.printf("\nTime taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
 		System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n",
