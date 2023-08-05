@@ -203,6 +203,8 @@ public class Main {
 		System.out.printf("\nTime taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
 		System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n",
 				System.currentTimeMillis() - projectStartTime);
+		
+		System.exit(0);
 
 	}
 
