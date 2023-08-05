@@ -183,13 +183,15 @@ public class Main {
 		
 		 executorService.shutdown();
 
-	        // Wait for all the tasks to finish.
-	        try {
-				executorService.awaitTermination(1, TimeUnit.MINUTES);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+	       while(!executorService.isTerminated()) {}
+	       
+	       
+	     //checking results
+	       
+	    for (int i = 0;i<finalResult.size();i++) {
+			
+	    	System.out.println("\nFor row "+(i+1)+" the answer size is "+finalResult.get((i+1)).size());
+		}   
 
 		System.out.printf("\nTime taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
 		System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n",
