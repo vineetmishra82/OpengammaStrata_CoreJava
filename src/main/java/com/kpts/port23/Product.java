@@ -201,18 +201,24 @@ public class Product {
 			List<StringBuilder> list = new ArrayList<StringBuilder>();
 
 			for (double i = 0; i < loopSize; i++) {
-				CurrencyAmount computedTrade = TRADE_PRICER.presentValue(TRADE, PROVIDER);
-				CurrencyAmount computedProduct = PRODUCT_PRICER.presentValue(PRODUCT, PROVIDER);
-				CurrencyAmount pvPayment = PRICER_NOMINAL.presentValue(UPFRONT_PAYMENT,
-						ZeroRateDiscountFactors.of(EUR, VAL_DATE, CURVE_REPO));
+				
+				Runnable calcData = () -> {
+					CurrencyAmount computedTrade = TRADE_PRICER.presentValue(TRADE, PROVIDER);
+					CurrencyAmount computedProduct = PRODUCT_PRICER.presentValue(PRODUCT, PROVIDER);
+					CurrencyAmount pvPayment = PRICER_NOMINAL.presentValue(UPFRONT_PAYMENT,
+							ZeroRateDiscountFactors.of(EUR, VAL_DATE, CURVE_REPO));
 
-				str.append("Present Values ->");
-				str.append("\nComputed Trade - " + computedTrade.getCurrency() + " : " + computedTrade.getAmount());
-				str.append(
-						"\nComputed Product - " + computedProduct.getCurrency() + " : " + computedProduct.getAmount());
-				str.append("\nPv Payment - " + pvPayment.getCurrency() + " : " + pvPayment.getAmount());
+					str.append("Present Values ->");
+					str.append("\nComputed Trade - " + computedTrade.getCurrency() + " : " + computedTrade.getAmount());
+					str.append(
+							"\nComputed Product - " + computedProduct.getCurrency() + " : " + computedProduct.getAmount());
+					str.append("\nPv Payment - " + pvPayment.getCurrency() + " : " + pvPayment.getAmount());
 
-				list.add(str);
+					list.add(str);				
+					
+				};
+				
+				calcData.run();			
 			}
 
 			return list;
