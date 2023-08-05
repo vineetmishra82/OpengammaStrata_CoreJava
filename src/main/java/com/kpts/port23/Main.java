@@ -156,10 +156,19 @@ public class Main {
 					Double.valueOf(item.get("FIXED_RATE")), item.get("START_DATE"), item.get("END_DATE"),
 					item.get("SETTLEMENT"), Double.valueOf(item.get("CLEAN_PRICE")), item.get("VAL_DATE"),
 					String.valueOf(lineNo));
-
+			
+			Thread t = new Thread(() ->  {
 				
-			finalResult.put(lineNum, product.calculatePresentValue(loopSize));
-
+				finalResult.put(lineNum, product.calculatePresentValue(loopSize));
+			});
+				
+		
+			t.start();
+			
+			while(!t.isAlive())
+			{
+				
+			}
 			
 				       
 			System.out.println("Processed Row " + lineNo + " for " + String.format("%.0f",loopSize)
