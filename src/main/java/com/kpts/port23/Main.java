@@ -158,11 +158,8 @@ public class Main {
 					String.valueOf(lineNo));
 
 			Callable<Void> callable = () -> {
-
-				resultList.add(product.calculatePresentValue(loopSize));	
 				
-				
-				finalResult.put(lineNum, resultList);
+				finalResult.put(lineNum, product.calculatePresentValue(loopSize));
 
 				return null;
 			};

@@ -192,11 +192,13 @@ public class Product {
 		return SecurityId.of(values[0], values[1]);
 	}
 
-	public StringBuilder calculatePresentValue(double loopSize) {
+	public List<StringBuilder> calculatePresentValue(double loopSize) {
 
 		try {
 
 			StringBuilder str = new StringBuilder();
+			
+			List<StringBuilder> list = new ArrayList<StringBuilder>();
 
 			for (double i = 0; i < loopSize; i++) {
 				CurrencyAmount computedTrade = TRADE_PRICER.presentValue(TRADE, PROVIDER);
@@ -210,9 +212,10 @@ public class Product {
 						"\nComputed Product - " + computedProduct.getCurrency() + " : " + computedProduct.getAmount());
 				str.append("\nPv Payment - " + pvPayment.getCurrency() + " : " + pvPayment.getAmount());
 
+				list.add(str);
 			}
 
-			return str;
+			return list;
 
 		} catch (Exception ex) {
 			System.out.println("Exception happened in row " + rowNum);
