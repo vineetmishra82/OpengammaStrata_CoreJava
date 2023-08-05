@@ -30,7 +30,7 @@ public class Main {
 
 		ExecutorService executorService = null;
 
-		Map<String, List<String>> finalResult = new HashMap<>();
+		Map<String, List<StringBuilder>> finalResult = new HashMap<>();
 
 		List<Map<String, String>> itemList = new ArrayList<Map<String, String>>();
 		System.out.println("Running strata project");
@@ -144,7 +144,7 @@ public class Main {
 		for (Map<String, String> item : itemList) {
 
 			final String lineNum = String.valueOf(lineNo);
-			List<String> resultList = new ArrayList<String>();
+			List<StringBuilder> resultList = new ArrayList<StringBuilder>();
 
 			double loopSize = loopCount == -1 ? Double.valueOf(item.get("Loops")) : loopCount;
 
@@ -159,10 +159,8 @@ public class Main {
 
 			Callable<Void> callable = () -> {
 
-				for (double i = 0; i < loopSize; i++) {
-					
-					resultList.add(product.calculatePresentValue());	
-				}
+				resultList.add(product.calculatePresentValue(loopSize));	
+				
 				
 				finalResult.put(lineNum, resultList);
 
