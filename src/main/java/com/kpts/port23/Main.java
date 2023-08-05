@@ -173,9 +173,9 @@ public class Main {
 			};
 			
 			executorService.submit(calculate);
-
-			System.out.println("Processed Row " + lineNo + " for " + String.format("%.0f", loopSize)
-					+ " times with result size " + finalResult.get(lineNum).size() + "\n");
+//
+//			System.out.println("Processed Row " + lineNo + " for " + String.format("%.0f", loopSize)
+//					+ " times with result size " + finalResult.get(lineNum).size() + "\n");
 
 			lineNo++;
 
