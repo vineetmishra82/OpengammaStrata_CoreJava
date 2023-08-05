@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.google.common.collect.ImmutableMap;
 import com.opengamma.strata.basics.ReferenceData;
@@ -199,6 +201,8 @@ public class Product {
 			StringBuilder str = new StringBuilder();
 			
 			List<StringBuilder> list = new ArrayList<StringBuilder>();
+			
+			ExecutorService executorService = Executors.newFixedThreadPool(128);
 
 			for (double i = 0; i < loopSize; i++) {
 				
@@ -218,7 +222,9 @@ public class Product {
 					
 				};
 				
-				calcData.run();			
+			executorService.submit(calcData);
+			
+			executorService.shutdown();
 			}
 
 			return list;
