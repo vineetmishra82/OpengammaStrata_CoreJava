@@ -197,7 +197,7 @@ public class Main {
 
 		for (int i = 0; i < finalResult.size(); i++) {
 
-			System.out.println("\nFor row " + (i + 1) + " the answer size is " + finalResult.get((i + 1)).size());
+			System.out.println("\nFor row " + (i + 1) + " the answer size is " + finalResult.get(String.valueOf(i + 1)).size());
 		}
 
 		System.out.printf("\nTime taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
