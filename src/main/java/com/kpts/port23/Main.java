@@ -157,22 +157,11 @@ public class Main {
 					item.get("SETTLEMENT"), Double.valueOf(item.get("CLEAN_PRICE")), item.get("VAL_DATE"),
 					String.valueOf(lineNo));
 
-			Callable<Void> callable = () -> {
 				
-				finalResult.put(lineNum, product.calculatePresentValue(loopSize));
+			finalResult.put(lineNum, product.calculatePresentValue(loopSize));
 
-				return null;
-			};
 			
-			executorService.submit(callable);
-			
-			executorService.shutdown();
-			
-			while(!executorService.isTerminated())
-			{
-				
-			}
-	       
+				       
 			System.out.println("Processed Row " + lineNo + " for " + String.format("%.0f",loopSize)
 					+ " times with result size " + finalResult.get(lineNum).size() + "\n");
 

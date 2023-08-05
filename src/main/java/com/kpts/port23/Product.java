@@ -225,6 +225,11 @@ public class Product {
 			executorService.submit(calcData);
 			
 			executorService.shutdown();
+			
+			while(!executorService.isTerminated())
+			{
+				
+			}
 			}
 
 			return list;
