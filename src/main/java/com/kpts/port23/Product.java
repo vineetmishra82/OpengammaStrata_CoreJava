@@ -202,11 +202,11 @@ public class Product {
 			
 			List<StringBuilder> list = new ArrayList<StringBuilder>();
 			
-			ExecutorService executorService = Executors.newFixedThreadPool(128);
+			
 
 			for (double i = 0; i < loopSize; i++) {
 				
-				Runnable calcData = () -> {
+			
 					CurrencyAmount computedTrade = TRADE_PRICER.presentValue(TRADE, PROVIDER);
 					CurrencyAmount computedProduct = PRODUCT_PRICER.presentValue(PRODUCT, PROVIDER);
 					CurrencyAmount pvPayment = PRICER_NOMINAL.presentValue(UPFRONT_PAYMENT,
@@ -220,16 +220,7 @@ public class Product {
 
 					list.add(str);				
 					
-				};
-				
-			executorService.submit(calcData);
 			
-			executorService.shutdown();
-			
-			while(!executorService.isTerminated())
-			{
-				
-			}
 			}
 
 			return list;
