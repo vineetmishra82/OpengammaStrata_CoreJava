@@ -165,7 +165,7 @@ public class Main {
 		
 			t.start();
 			
-			while(!t.isAlive())
+			while(t.isAlive())
 			{
 				
 			}
