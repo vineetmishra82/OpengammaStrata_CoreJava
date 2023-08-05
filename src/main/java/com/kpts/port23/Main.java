@@ -18,6 +18,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
 
@@ -156,27 +157,39 @@ public class Main {
 					Double.valueOf(item.get("FIXED_RATE")), item.get("START_DATE"), item.get("END_DATE"),
 					item.get("SETTLEMENT"), Double.valueOf(item.get("CLEAN_PRICE")), item.get("VAL_DATE"),
 					String.valueOf(lineNo));
+
+			Runnable calculate = new Runnable() {
+
+				@Override
+				public void run() {
+
+					for (double i = 0; i < loopSize; i++) {
+
+						resultList.add(product.calculatePresentValue());
+					}
+					
+					finalResult.put(lineNum, resultList);
+				}
+			};
 			
-			Thread t = new Thread(() ->  {
-				
-				finalResult.put(lineNum, product.calculatePresentValue(loopSize));
-			});
-				
-		
-			t.start();
-			
-			while(t.isAlive())
-			{
-				
-			}
-			
-				       
-			System.out.println("Processed Row " + lineNo + " for " + String.format("%.0f",loopSize)
+			executorService.submit(calculate);
+
+			System.out.println("Processed Row " + lineNo + " for " + String.format("%.0f", loopSize)
 					+ " times with result size " + finalResult.get(lineNum).size() + "\n");
 
 			lineNo++;
 
 		}
+		
+		 executorService.shutdown();
+
+	        // Wait for all the tasks to finish.
+	        try {
+				executorService.awaitTermination(1, TimeUnit.MINUTES);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		System.out.printf("\nTime taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
 		System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n",
