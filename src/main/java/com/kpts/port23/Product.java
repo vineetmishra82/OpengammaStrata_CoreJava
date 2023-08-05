@@ -235,8 +235,8 @@ public class Product {
 			return list;
 
 		} catch (Exception ex) {
-			System.out.println("Exception happened in row " + rowNum);
-			System.exit(0);
+			System.out.println("Exception happened in row " + rowNum+" error - "+ex.getLocalizedMessage());
+			
 		}
 
 		return null;
