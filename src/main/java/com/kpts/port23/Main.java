@@ -193,6 +193,8 @@ public class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		long duration = System.currentTimeMillis() - startTime;
 		// checking results
 
 		for (int i = 0; i < finalResult.size(); i++) {
@@ -200,7 +202,7 @@ public class Main {
 			System.out.println("\nFor row " + (i + 1) + " the answer size is " + finalResult.get(String.valueOf(i + 1)).size());
 		}
 
-		System.out.printf("\nTime taken for calculations only : %s ms%n", System.currentTimeMillis() - startTime);
+		System.out.printf("\nTime taken for calculations only : %s ms%n",duration );
 		System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n",
 				System.currentTimeMillis() - projectStartTime);
 		
