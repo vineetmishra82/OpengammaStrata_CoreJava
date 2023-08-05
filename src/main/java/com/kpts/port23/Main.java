@@ -161,8 +161,7 @@ public class Main {
 
 				for (double i = 0; i < loopSize; i++) {
 					
-					resultList.add(product.calculatePresentValue());				
-
+					resultList.add(product.calculatePresentValue());	
 				}
 				
 				finalResult.put(lineNum, resultList);
@@ -173,6 +172,11 @@ public class Main {
 			executorService.submit(callable);
 			
 			executorService.shutdown();
+			
+			while(!executorService.isTerminated())
+			{
+				
+			}
 	       
 			System.out.println("Processed Row " + lineNo + " for " + String.format("%.0f",loopSize)
 					+ " times with result size " + finalResult.get(lineNum).size() + "\n");
