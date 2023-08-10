@@ -205,7 +205,7 @@ public class Main {
 
 		for (int i = 0; i < finalResult.size(); i++) {
 
-			long size = finalResult.get(String.valueOf(i + 1)).size();
+			int size = finalResult.get(String.valueOf(i + 1)).size();
 			System.out.println("\nFor row " + (i + 1) + " the answer size is " + size);
 			totalSum.add(BigInteger.valueOf(size));
 		
