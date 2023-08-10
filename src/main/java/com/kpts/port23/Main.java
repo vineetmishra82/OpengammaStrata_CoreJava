@@ -68,7 +68,7 @@ public class Main {
 				System.out.println("All rows will be read as u entered wrong");
 			}
 			
-			latch = new CountDownLatch(noOfRows);
+			latch = new CountDownLatch(noOfRows-1);
 
 			readLines: while ((line = buffReader.readLine()) != null) {
 				String[] values = line.split(",");
