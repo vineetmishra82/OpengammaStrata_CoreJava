@@ -25,6 +25,7 @@ public class Main {
 
 	static List<String> headers = new ArrayList<String>();
 	static double loopCount = -1;
+	static  CountDownLatch latch;
 
 	public static void main(String[] args) {
 		Scanner scan = new Scanner(System.in);
@@ -34,8 +35,6 @@ public class Main {
 
 		Map<String, List<StringBuilder>> finalResult = new HashMap<>();
 		
-		  CountDownLatch latch = new CountDownLatch(10);
-
 		List<Map<String, String>> itemList = new ArrayList<Map<String, String>>();
 		System.out.println("Running strata project");
 
@@ -68,6 +67,8 @@ public class Main {
 				// TODO Auto-generated catch block
 				System.out.println("All rows will be read as u entered wrong");
 			}
+			
+			latch = new CountDownLatch(noOfRows);
 
 			readLines: while ((line = buffReader.readLine()) != null) {
 				String[] values = line.split(",");
