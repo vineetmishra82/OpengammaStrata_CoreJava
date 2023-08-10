@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -199,15 +200,21 @@ public class Main {
 		
 		long duration = System.currentTimeMillis() - startTime;
 		// checking results
+		
+		BigInteger totalSum = BigInteger.ZERO;
 
 		for (int i = 0; i < finalResult.size(); i++) {
 
-			System.out.println("\nFor row " + (i + 1) + " the answer size is " + finalResult.get(String.valueOf(i + 1)).size());
+			long size = finalResult.get(String.valueOf(i + 1)).size();
+			System.out.println("\nFor row " + (i + 1) + " the answer size is " + size);
+			totalSum.add(BigInteger.valueOf(size));
+		
 		}
 
 		System.out.printf("\nTime taken for calculations only : %s ms%n",duration );
 		System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n",
 				System.currentTimeMillis() - projectStartTime);
+		System.out.println("Total calculations done - "+totalSum);
 		
 		System.exit(0);
 
