@@ -201,7 +201,7 @@ public class Main {
 		long duration = System.currentTimeMillis() - startTime;
 		// checking results
 		
-		BigInteger totalSum = BigInteger.ZERO;
+		BigInteger totalSum = new BigInteger("0");
 
 		for (int i = 0; i < finalResult.size(); i++) {
 
