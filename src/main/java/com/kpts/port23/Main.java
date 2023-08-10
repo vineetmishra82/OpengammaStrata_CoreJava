@@ -170,7 +170,7 @@ public class Main {
 
 						resultList.add(getFactorial(i));
 					}
-
+					latch.countDown();	
 					finalResult.put(lineNum, resultList);
 					
 				}
