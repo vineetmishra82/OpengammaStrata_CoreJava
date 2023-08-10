@@ -154,12 +154,12 @@ public class Main {
 
 			executorService = Executors.newFixedThreadPool(threadCount);
 
-			Product product = new Product(item.get("SECURITY_SCHEME") + "," + item.get("SECURITY_VALUE"),
-					item.get("SECURITY_SCHEME") + "," + item.get("ISSUER_VALUE"),
-					Long.valueOf(item.get("QUANTITY").replace("L", "")), Double.valueOf(item.get("NOTIONAL")),
-					Double.valueOf(item.get("FIXED_RATE")), item.get("START_DATE"), item.get("END_DATE"),
-					item.get("SETTLEMENT"), Double.valueOf(item.get("CLEAN_PRICE")), item.get("VAL_DATE"),
-					String.valueOf(lineNo));
+//			Product product = new Product(item.get("SECURITY_SCHEME") + "," + item.get("SECURITY_VALUE"),
+//					item.get("SECURITY_SCHEME") + "," + item.get("ISSUER_VALUE"),
+//					Long.valueOf(item.get("QUANTITY").replace("L", "")), Double.valueOf(item.get("NOTIONAL")),
+//					Double.valueOf(item.get("FIXED_RATE")), item.get("START_DATE"), item.get("END_DATE"),
+//					item.get("SETTLEMENT"), Double.valueOf(item.get("CLEAN_PRICE")), item.get("VAL_DATE"),
+//					String.valueOf(lineNo));
 
 			Runnable calculate = new Runnable() {
 
@@ -168,12 +168,14 @@ public class Main {
 
 					for (double i = 0; i < loopSize; i++) {
 
-						resultList.add(product.calculatePresentValue());
+						resultList.add(getFactorial(i));
 					}
 
 					finalResult.put(lineNum, resultList);
-					latch.countDown();
+					
 				}
+
+				
 			};
 
 			executorService.submit(calculate);
@@ -208,6 +210,14 @@ public class Main {
 		
 		System.exit(0);
 
+	}
+	
+	private static StringBuilder getFactorial(double i) {
+
+		StringBuilder stB = new StringBuilder();
+		
+		stB.append(String.valueOf(i*i));
+		return stB;
 	}
 
 }
