@@ -305,8 +305,10 @@ public class Main {
 				statement = connection.createStatement();
 				
 				statement.executeUpdate("DROP TABLE IF EXISTS TableForRow"+lineNum);
-				statement.executeUpdate("CREATE TABLE TableForRow"+lineNum+" (Calculation STRING)");
+				statement.executeUpdate("CREATE TABLE TableForRow"+lineNum+"(Calculation STRING)");
 				
+				
+				System.out.println("Checking table - "+statement.executeUpdate("SELECT * FROM TableForRow"+lineNum));
 				connection.close();
 				
 			}catch(SQLException e) {
@@ -342,7 +344,7 @@ public class Main {
 					}
 					latch.countDown();
 					
-					finalResult.put(lineNum, resultList);
+					//finalResult.put(lineNum, resultList);
 					
 				}
 
