@@ -299,23 +299,7 @@ public class Main {
 //					item.get("SETTLEMENT"), Double.valueOf(item.get("CLEAN_PRICE")), item.get("VAL_DATE"),
 //					String.valueOf(lineNo));
 			
-			Connection connection = null;
-			Statement statement = null;
 			
-			try {
-				
-				connection = DriverManager.getConnection("jdbc:sqlite:sqlitedb.db");
-				statement = connection.createStatement();
-				
-				statement.executeUpdate("DROP TABLE IF EXISTS TableForRow"+lineNum);
-				statement.executeUpdate("CREATE TABLE TableForRow"+lineNum+"(Calculation STRING)");
-						
-				connection.close();
-				
-			}catch(SQLException e) {
-				System.out.println(e.getLocalizedMessage());
-			}
-
 			Runnable calculate = new Runnable() {
 
 				@Override
