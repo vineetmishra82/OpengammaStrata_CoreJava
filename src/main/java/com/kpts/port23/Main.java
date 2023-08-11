@@ -317,17 +317,7 @@ public class Main {
 
 				@Override
 				public void run() {
-					Connection connection = null;
-					Statement statement = null;
-					try {
-						connection = DriverManager.getConnection("jdbc:sqlite:sqlitedb.db");
-						statement = connection.createStatement();
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				
-					
+										
 					for (double i = 0; i < loopSize; i++) {
 
 						CurrencyAmount computedTrade = TRADE_PRICER.presentValue(TRADE, PROVIDER);
@@ -336,10 +326,13 @@ public class Main {
 								ZeroRateDiscountFactors.of(EUR, VAL_DATE, CURVE_REPO));
 						
 						try {
+							Connection connection = DriverManager.getConnection("jdbc:sqlite:sqlitedb.db");
+							Statement statement  = connection.createStatement();
 							statement.executeUpdate("INSERT INTO TableForRow"+lineNum+" VALUES('"+(
 									computedTrade.getCurrency()+","+computedTrade.getAmount()+","+
 									computedProduct.getAmount()+","+pvPayment.getAmount())+"');");
 							
+							connection.close();
 						} catch (SQLException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -349,12 +342,7 @@ public class Main {
 						
 					}
 					
-					try {
-						connection.close();
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					
 					latch.countDown();
 					
 					//finalResult.put(lineNum, resultList);
