@@ -317,18 +317,21 @@ public class Main {
 				private void sendToDatabase(Currency currency, double amount, double amount2,
 						double amount3) {
 					
-					new Thread() {
+					Runnable t = new Runnable() {
 						
 						@Override
 						public void run() {
 							
-							resultList.add(new StringBuilder(currency+":"+amount+","+
-									currency+":"+amount2+","+
-									currency+":"+amount3));
+//							resultList.add(new StringBuilder(currency+":"+amount+","+
+//									currency+":"+amount2+","+
+//									currency+":"+amount3));
 						}
-					}.start();;
-										
-				}			
+					};
+					
+					t.run();
+				}
+
+				
 
 			};
 
