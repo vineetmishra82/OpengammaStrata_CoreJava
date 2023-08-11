@@ -234,6 +234,9 @@ public class Main {
 
 		int lineNo = 1;
 		long startTime = System.currentTimeMillis();
+		
+		
+		
 		for (Map<String, String> item : itemList) {
 
 			// Setting opengamma variables
@@ -325,55 +328,44 @@ public class Main {
 						CurrencyAmount pvPayment = PRICER_NOMINAL.presentValue(UPFRONT_PAYMENT,
 								ZeroRateDiscountFactors.of(EUR, VAL_DATE, CURVE_REPO));
 						
-						try {
-							Connection connection = DriverManager.getConnection("jdbc:sqlite:sqlitedb.db");
-							Statement statement  = connection.createStatement();
-							statement.executeUpdate("INSERT INTO TableForRow"+lineNum+" VALUES('"+(
-									computedTrade.getCurrency()+","+computedTrade.getAmount()+","+
-									computedProduct.getAmount()+","+pvPayment.getAmount())+"');");
-							
-							connection.close();
-						} catch (SQLException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					//	sendToDatabase(computedTrade.getCurrency(),computedTrade.getAmount(),
-					//			computedProduct.getAmount(),pvPayment.getAmount());
+						
+						sendToDatabase(computedTrade.getCurrency(),computedTrade.getAmount(),
+						computedProduct.getAmount(),pvPayment.getAmount());
 						
 					}
 					
 					
 					latch.countDown();
 					
-					//finalResult.put(lineNum, resultList);
+					finalResult.put(lineNum, resultList);
 					
 				}
 
-//				private void sendToDatabase(Currency currency, double amount, double amount2,
-//						double amount3) {
-//					
-//					Runnable t = new Runnable() {
-//						
-//						@Override
-//						public void run() {
-//							
-////							resultList.add(new StringBuilder(currency+":"+amount+","+
-////									currency+":"+amount2+","+
-////									currency+":"+amount3));
-//						}
-//					};
-//					
-//					t.run();
-//				}
+				private void sendToDatabase(Currency currency, double amount, double amount2,
+						double amount3) {
+					
+					Runnable t = new Runnable() {
+						
+						@Override
+						public void run() {
+							
+							resultList.add(new StringBuilder(currency+":"+amount+","+
+									currency+":"+amount2+","+
+									currency+":"+amount3));
+						}
+					};
+					
+					t.run();
+				}
 
 				
 
 			};
 
 			executorService.submit(calculate);
-//
-//			System.out.println("Processed Row " + lineNo + " for " + String.format("%.0f", loopSize)
-//					+ " times with result size " + finalResult.get(lineNum).size() + "\n");
+
+			System.out.println("Processed Row " + lineNo + " for " + String.format("%.0f", loopSize)
+					+ " times with result size " + finalResult.get(lineNum).size() + "\n");
 
 			lineNo++;
 
@@ -391,12 +383,12 @@ public class Main {
 		long duration = System.currentTimeMillis() - startTime;
 		// checking results
 
-//		for (int i = 0; i < finalResult.size(); i++) {
-//
-//			int size = finalResult.get(String.valueOf(i + 1)).size();
-//			System.out.println("\nFor row " + (i + 1) + " the answer size is " + size);
-//
-//		}
+		for (int i = 0; i < finalResult.size(); i++) {
+
+			int size = finalResult.get(String.valueOf(i + 1)).size();
+			System.out.println("\nFor row " + (i + 1) + " the answer size is " + size);
+
+		}
 
 		System.out.printf("\nTime taken for calculations only : %s ms%n", duration);
 		System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n",
