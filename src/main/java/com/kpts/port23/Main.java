@@ -10,6 +10,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigInteger;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -291,6 +295,23 @@ public class Main {
 //					Double.valueOf(item.get("FIXED_RATE")), item.get("START_DATE"), item.get("END_DATE"),
 //					item.get("SETTLEMENT"), Double.valueOf(item.get("CLEAN_PRICE")), item.get("VAL_DATE"),
 //					String.valueOf(lineNo));
+			
+			Connection connection = null;
+			Statement statement = null;
+			
+			try {
+				
+				connection = DriverManager.getConnection("jdbc:sqlite:sqlitedb.db");
+				statement = connection.createStatement();
+				
+				statement.executeUpdate("DROP TABLE IF EXISTS TableForRow"+lineNum);
+				statement.executeUpdate("CREATE TABLE TableForRow"+lineNum+" (Calculation STRING)");
+				
+				connection.close();
+				
+			}catch(SQLException e) {
+				System.out.println(e.getLocalizedMessage());
+			}
 
 			Runnable calculate = new Runnable() {
 
@@ -303,8 +324,19 @@ public class Main {
 						CurrencyAmount computedProduct = PRODUCT_PRICER.presentValue(PRODUCT, PROVIDER);
 						CurrencyAmount pvPayment = PRICER_NOMINAL.presentValue(UPFRONT_PAYMENT,
 								ZeroRateDiscountFactors.of(EUR, VAL_DATE, CURVE_REPO));
-
-						sendToDatabase(computedTrade.getCurrency(),computedTrade.getAmount(),
+						
+						try {
+							Connection connection = DriverManager.getConnection("jdbc:sqlite:sqlitedb.db");
+							Statement statement = connection.createStatement();
+							statement.executeUpdate("INSERT INTO TableForRow"+lineNum+" VALUES('"+(
+									computedTrade.getCurrency()+","+computedTrade.getAmount()+","+
+									computedProduct.getAmount()+","+pvPayment.getAmount()+"');"));
+							connection.close();
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					//	sendToDatabase(computedTrade.getCurrency(),computedTrade.getAmount(),
 								computedProduct.getAmount(),pvPayment.getAmount());
 						
 					}
