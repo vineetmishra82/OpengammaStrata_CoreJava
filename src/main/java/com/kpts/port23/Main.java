@@ -356,12 +356,12 @@ public class Main {
 		long duration = System.currentTimeMillis() - startTime;
 		// checking results
 
-		for (int i = 0; i < finalResult.size(); i++) {
-
-			int size = finalResult.get(String.valueOf(i + 1)).size();
-			System.out.println("\nFor row " + (i + 1) + " the answer size is " + size);
-
-		}
+//		for (int i = 0; i < finalResult.size(); i++) {
+//
+//			int size = finalResult.get(String.valueOf(i + 1)).size();
+//			System.out.println("\nFor row " + (i + 1) + " the answer size is " + size);
+//
+//		}
 
 		System.out.printf("\nTime taken for calculations only : %s ms%n", duration);
 		System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n",
