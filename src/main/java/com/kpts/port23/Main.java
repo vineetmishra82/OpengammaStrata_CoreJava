@@ -304,15 +304,21 @@ public class Main {
 						CurrencyAmount computedProduct = PRODUCT_PRICER.presentValue(PRODUCT, PROVIDER);
 						CurrencyAmount pvPayment = PRICER_NOMINAL.presentValue(UPFRONT_PAYMENT,
 								ZeroRateDiscountFactors.of(EUR, VAL_DATE, CURVE_REPO));
-
-						resultList.add(new StringBuilder(computedTrade.getCurrency() + ":" + computedTrade.getAmount()
-								+ "," + computedTrade.getCurrency() + ":" + computedProduct.getAmount() + ","
-								+ computedTrade.getCurrency() + ":" + pvPayment.getAmount()));
+						
+						synchronized (resultList) {
+							resultList.add(new StringBuilder(computedTrade.getCurrency() + ":" + computedTrade.getAmount()
+							+ "," + computedTrade.getCurrency() + ":" + computedProduct.getAmount() + ","
+							+ computedTrade.getCurrency() + ":" + pvPayment.getAmount()));
+						}
+						
 
 					}
 					latch.countDown();
-
-					finalResult.put(lineNum, resultList);
+					
+					synchronized (finalResult) {
+						finalResult.put(lineNum, resultList);
+					}
+					
 				}
 			};
 
