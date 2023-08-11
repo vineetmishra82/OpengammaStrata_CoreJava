@@ -294,35 +294,31 @@ public class Main {
 //					item.get("SETTLEMENT"), Double.valueOf(item.get("CLEAN_PRICE")), item.get("VAL_DATE"),
 //					String.valueOf(lineNo));
 
-			
-				Runnable calculate = new Runnable() {
+			Runnable calculate = new Runnable() {
 
-					@Override
-					public void run() {
+				@Override
+				public void run() {
 
-						for (double i = 0; i < loopSize; i++) {
+					for (double i = 0; i < loopSize; i++) {
 						CurrencyAmount computedTrade = TRADE_PRICER.presentValue(TRADE, PROVIDER);
 						CurrencyAmount computedProduct = PRODUCT_PRICER.presentValue(PRODUCT, PROVIDER);
 						CurrencyAmount pvPayment = PRICER_NOMINAL.presentValue(UPFRONT_PAYMENT,
 								ZeroRateDiscountFactors.of(EUR, VAL_DATE, CURVE_REPO));
 
-						resultList.add(new StringBuilder(computedTrade.getCurrency() + ":" + computedTrade.getAmount() + "," + computedTrade.getCurrency() + ":"
-								+ computedProduct.getAmount() + "," + computedTrade.getCurrency() + ":" +pvPayment.getAmount()));
-					
-					}
+						resultList.add(new StringBuilder(computedTrade.getCurrency() + ":" + computedTrade.getAmount()
+								+ "," + computedTrade.getCurrency() + ":" + computedProduct.getAmount() + ","
+								+ computedTrade.getCurrency() + ":" + pvPayment.getAmount()));
 
-				
+					}
+					latch.countDown();
+
+					finalResult.put(lineNum, resultList);
 				}
 			};
-				
 
-				executorService.submit(calculate);
+			executorService.submit(calculate);
 
 		
-
-			latch.countDown();
-
-			finalResult.put(lineNum, resultList);
 
 			lineNo++;
 
