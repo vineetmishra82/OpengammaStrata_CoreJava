@@ -330,14 +330,14 @@ public class Main {
 							Statement statement = connection.createStatement();
 							statement.executeUpdate("INSERT INTO TableForRow"+lineNum+" VALUES('"+(
 									computedTrade.getCurrency()+","+computedTrade.getAmount()+","+
-									computedProduct.getAmount()+","+pvPayment.getAmount()+"');"));
+									computedProduct.getAmount()+","+pvPayment.getAmount())+"');");
 							connection.close();
 						} catch (SQLException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					//	sendToDatabase(computedTrade.getCurrency(),computedTrade.getAmount(),
-								computedProduct.getAmount(),pvPayment.getAmount());
+					//			computedProduct.getAmount(),pvPayment.getAmount());
 						
 					}
 					latch.countDown();
@@ -346,22 +346,22 @@ public class Main {
 					
 				}
 
-				private void sendToDatabase(Currency currency, double amount, double amount2,
-						double amount3) {
-					
-					Runnable t = new Runnable() {
-						
-						@Override
-						public void run() {
-							
-//							resultList.add(new StringBuilder(currency+":"+amount+","+
-//									currency+":"+amount2+","+
-//									currency+":"+amount3));
-						}
-					};
-					
-					t.run();
-				}
+//				private void sendToDatabase(Currency currency, double amount, double amount2,
+//						double amount3) {
+//					
+//					Runnable t = new Runnable() {
+//						
+//						@Override
+//						public void run() {
+//							
+////							resultList.add(new StringBuilder(currency+":"+amount+","+
+////									currency+":"+amount2+","+
+////									currency+":"+amount3));
+//						}
+//					};
+//					
+//					t.run();
+//				}
 
 				
 
