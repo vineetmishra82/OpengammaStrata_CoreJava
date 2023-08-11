@@ -354,7 +354,7 @@ public class Main {
 		System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n",
 		System.currentTimeMillis() - projectStartTime);
 		
-		System.exit(0);
+	//	System.exit(0);
 
 	}
 
