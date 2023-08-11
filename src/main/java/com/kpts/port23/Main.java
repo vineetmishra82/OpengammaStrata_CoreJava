@@ -91,20 +91,15 @@ public class Main {
 		DayCount DAY_COUNT;
 		LocalDate START_DATE;
 		LocalDate END_DATE;
-		
+
 		LocalDate SETTLEMENT;
 		BusinessDayAdjustment BUSINESS_ADJUST;
 		PeriodicSchedule PERIOD_SCHEDULE;
 		DaysAdjustment EX_COUPON;
 		double CLEAN_PRICE;
-		
-		
-		
-		
+
 		double DIRTY_PRICE;
-		
-		
-		
+
 		CurveInterpolator INTERPOLATOR = CurveInterpolators.LINEAR;
 		CurveName NAME_REPO = CurveName.of("TestRepoCurve");
 		CurveMetadata METADATA_REPO = Curves.zeroRates(NAME_REPO, ACT_365F);
@@ -234,9 +229,7 @@ public class Main {
 
 		int lineNo = 1;
 		long startTime = System.currentTimeMillis();
-		
-		
-		
+
 		for (Map<String, String> item : itemList) {
 
 			// Setting opengamma variables
@@ -266,16 +259,18 @@ public class Main {
 
 			// CalculateProduct();
 
-			final ResolvedFixedCouponBond PRODUCT = FixedCouponBond.builder().securityId(SECURITY_ID).dayCount(DAY_COUNT).fixedRate(FIXED_RATE)
-					.legalEntityId(ISSUER_ID).currency(EUR).notional(NOTIONAL).accrualSchedule(PERIOD_SCHEDULE)
-					.settlementDateOffset(DATE_OFFSET).yieldConvention(YIELD_CONVENTION).exCouponPeriod(EX_COUPON)
-					.build().resolve(REF_DATA);
+			final ResolvedFixedCouponBond PRODUCT = FixedCouponBond.builder().securityId(SECURITY_ID)
+					.dayCount(DAY_COUNT).fixedRate(FIXED_RATE).legalEntityId(ISSUER_ID).currency(EUR).notional(NOTIONAL)
+					.accrualSchedule(PERIOD_SCHEDULE).settlementDateOffset(DATE_OFFSET)
+					.yieldConvention(YIELD_CONVENTION).exCouponPeriod(EX_COUPON).build().resolve(REF_DATA);
 
 			DIRTY_PRICE = PRODUCT_PRICER.dirtyPriceFromCleanPrice(PRODUCT, SETTLEMENT, CLEAN_PRICE);
-			final Payment UPFRONT_PAYMENT = Payment.of(CurrencyAmount.of(EUR, -QUANTITY * NOTIONAL * DIRTY_PRICE), SETTLEMENT);
+			final Payment UPFRONT_PAYMENT = Payment.of(CurrencyAmount.of(EUR, -QUANTITY * NOTIONAL * DIRTY_PRICE),
+					SETTLEMENT);
 			// CalculateTrade();
-			final ResolvedFixedCouponBondTrade TRADE = ResolvedFixedCouponBondTrade.builder().product(PRODUCT).quantity(QUANTITY)
-					.settlement(ResolvedFixedCouponBondSettlement.of(SETTLEMENT, CLEAN_PRICE)).build();
+			final ResolvedFixedCouponBondTrade TRADE = ResolvedFixedCouponBondTrade.builder().product(PRODUCT)
+					.quantity(QUANTITY).settlement(ResolvedFixedCouponBondSettlement.of(SETTLEMENT, CLEAN_PRICE))
+					.build();
 
 			DiscountFactors dscRepo = ZeroRateDiscountFactors.of(EUR, VAL_DATE, CURVE_REPO);
 			DiscountFactors dscIssuer = ZeroRateDiscountFactors.of(EUR, VAL_DATE, CURVE_ISSUER);
@@ -298,58 +293,48 @@ public class Main {
 //					Double.valueOf(item.get("FIXED_RATE")), item.get("START_DATE"), item.get("END_DATE"),
 //					item.get("SETTLEMENT"), Double.valueOf(item.get("CLEAN_PRICE")), item.get("VAL_DATE"),
 //					String.valueOf(lineNo));
-			
-			
+
 			Runnable calculate = new Runnable() {
 
 				@Override
 				public void run() {
-										
+
 					for (double i = 0; i < loopSize; i++) {
 
 						CurrencyAmount computedTrade = TRADE_PRICER.presentValue(TRADE, PROVIDER);
 						CurrencyAmount computedProduct = PRODUCT_PRICER.presentValue(PRODUCT, PROVIDER);
 						CurrencyAmount pvPayment = PRICER_NOMINAL.presentValue(UPFRONT_PAYMENT,
 								ZeroRateDiscountFactors.of(EUR, VAL_DATE, CURVE_REPO));
-						
-						
-						sendToDatabase(computedTrade.getCurrency(),computedTrade.getAmount(),
-						computedProduct.getAmount(),pvPayment.getAmount());
-						
+
+						sendToDatabase(computedTrade.getCurrency(), computedTrade.getAmount(),
+								computedProduct.getAmount(), pvPayment.getAmount());
+
 					}
-					
-					
+
 					latch.countDown();
-					
+
 					finalResult.put(lineNum, resultList);
-					
+
 				}
 
-				private void sendToDatabase(Currency currency, double amount, double amount2,
-						double amount3) {
-					
+				private void sendToDatabase(Currency currency, double amount, double amount2, double amount3) {
+
 					Runnable t = new Runnable() {
-						
+
 						@Override
 						public void run() {
-							
-							resultList.add(new StringBuilder(currency+":"+amount+","+
-									currency+":"+amount2+","+
-									currency+":"+amount3));
+
+							resultList.add(new StringBuilder(currency + ":" + amount + "," + currency + ":" + amount2
+									+ "," + currency + ":" + amount3));
 						}
 					};
-					
+
 					t.run();
 				}
-
-				
 
 			};
 
 			executorService.submit(calculate);
-
-			System.out.println("Processed Row " + lineNo + " for " + String.format("%.0f", loopSize)
-					+ " times with result size " + finalResult.get(lineNum).size() + "\n");
 
 			lineNo++;
 
@@ -376,8 +361,8 @@ public class Main {
 
 		System.out.printf("\nTime taken for calculations only : %s ms%n", duration);
 		System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n",
-		System.currentTimeMillis() - projectStartTime);
-		
+				System.currentTimeMillis() - projectStartTime);
+
 		System.exit(0);
 
 	}
