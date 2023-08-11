@@ -307,12 +307,17 @@ public class Main {
 						str.append(computedTrade.getCurrency() + ":" + computedTrade.getAmount() + ","
 								+ computedProduct.getCurrency() + " : " + computedProduct.getAmount() + ","
 								+ pvPayment.getCurrency() + " : " + pvPayment.getAmount());
-					//	resultList.add(str);
+						
+						sendToDatabase(str);
 
 					}
 					latch.countDown();
-					finalResult.put(lineNum, resultList);
-					totalSum.add(BigInteger.valueOf(resultList.size()));
+					
+				}
+
+				private void sendToDatabase(StringBuilder str) {
+					// TODO Auto-generated method stub
+					
 				}
 
 			};
@@ -347,9 +352,8 @@ public class Main {
 
 		System.out.printf("\nTime taken for calculations only : %s ms%n", duration);
 		System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n",
-				System.currentTimeMillis() - projectStartTime);
-		System.out.println("Total calculations done - " + totalSum);
-
+		System.currentTimeMillis() - projectStartTime);
+		
 		System.exit(0);
 
 	}
