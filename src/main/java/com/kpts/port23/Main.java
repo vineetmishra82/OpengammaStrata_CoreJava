@@ -294,12 +294,11 @@ public class Main {
 //					item.get("SETTLEMENT"), Double.valueOf(item.get("CLEAN_PRICE")), item.get("VAL_DATE"),
 //					String.valueOf(lineNo));
 
-			Runnable calculate = new Runnable() {
+			for (double i = 0; i < loopSize; i++) {
+				Runnable calculate = new Runnable() {
 
-				@Override
-				public void run() {
-
-					for (double i = 0; i < loopSize; i++) {
+					@Override
+					public void run() {
 
 						CurrencyAmount computedTrade = TRADE_PRICER.presentValue(TRADE, PROVIDER);
 						CurrencyAmount computedProduct = PRODUCT_PRICER.presentValue(PRODUCT, PROVIDER);
@@ -311,30 +310,30 @@ public class Main {
 
 					}
 
-					latch.countDown();
+					private void sendToDatabase(Currency currency, double amount, double amount2, double amount3) {
 
-					finalResult.put(lineNum, resultList);
+						Runnable t = new Runnable() {
 
-				}
+							@Override
+							public void run() {
 
-				private void sendToDatabase(Currency currency, double amount, double amount2, double amount3) {
+								resultList.add(new StringBuilder(currency + ":" + amount + "," + currency + ":"
+										+ amount2 + "," + currency + ":" + amount3));
+							}
+						};
 
-					Runnable t = new Runnable() {
+						t.run();
+					}
 
-						@Override
-						public void run() {
+				};
 
-							resultList.add(new StringBuilder(currency + ":" + amount + "," + currency + ":" + amount2
-									+ "," + currency + ":" + amount3));
-						}
-					};
+				executorService.submit(calculate);
 
-					t.run();
-				}
+			}
 
-			};
+			latch.countDown();
 
-			executorService.submit(calculate);
+			finalResult.put(lineNum, resultList);
 
 			lineNo++;
 
