@@ -307,7 +307,7 @@ public class Main {
 						str.append(computedTrade.getCurrency() + ":" + computedTrade.getAmount() + ","
 								+ computedProduct.getCurrency() + " : " + computedProduct.getAmount() + ","
 								+ pvPayment.getCurrency() + " : " + pvPayment.getAmount());
-						resultList.add(str);
+					//	resultList.add(str);
 
 					}
 					latch.countDown();
