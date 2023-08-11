@@ -311,12 +311,13 @@ public class Main {
 						sendToDatabase(str);
 
 					}
-					//latch.countDown();
+					latch.countDown();
 					
 				}
 
 				private void sendToDatabase(StringBuilder str) {
-					// TODO Auto-generated method stub
+
+					
 					
 				}
 
@@ -333,12 +334,12 @@ public class Main {
 
 		executorService.shutdown();
 
-//		try {
-//			latch.await();
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		try {
+			latch.await();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		long duration = System.currentTimeMillis() - startTime;
 		// checking results
