@@ -316,8 +316,8 @@ public class Main {
 
 				private void sendToDatabase(Currency currency, double amount, double amount2,
 						double amount3) {
-
-					Runnable t = new Runnable() {
+					
+					new Thread() {
 						
 						@Override
 						public void run() {
@@ -326,12 +326,9 @@ public class Main {
 									currency+":"+amount2+","+
 									currency+":"+amount3));
 						}
-					};
-					
-					t.run();
-				}
-
-				
+					}.start();;
+										
+				}			
 
 			};
 
