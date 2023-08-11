@@ -305,18 +305,30 @@ public class Main {
 								ZeroRateDiscountFactors.of(EUR, VAL_DATE, CURVE_REPO));
 
 						sendToDatabase(computedTrade.getCurrency(),computedTrade.getAmount(),
-								computedProduct.getCurrency(),computedProduct.getAmount(),
-								pvPayment.getCurrency(),pvPayment.getAmount());
-
+								computedProduct.getAmount(),pvPayment.getAmount());
+						
 					}
 					latch.countDown();
 					
+					finalResult.put(lineNum, resultList);
+					
 				}
 
-				private void sendToDatabase(Currency currency, double amount, Currency currency2, double amount2,
-						Currency currency3, double amount3) {
-					// TODO Auto-generated method stub
+				private void sendToDatabase(Currency currency, double amount, double amount2,
+						double amount3) {
+
+					Runnable t = new Runnable() {
+						
+						@Override
+						public void run() {
+							
+							resultList.add(new StringBuilder(currency+":"+amount+","+
+									currency+":"+amount2+","+
+									currency+":"+amount3));
+						}
+					};
 					
+					t.run();
 				}
 
 				
