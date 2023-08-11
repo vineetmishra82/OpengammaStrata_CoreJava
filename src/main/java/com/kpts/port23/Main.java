@@ -27,6 +27,7 @@ public class Main {
 	static List<String> headers = new ArrayList<String>();
 	static double loopCount = -1;
 	static  CountDownLatch latch;
+	static BigInteger totalSum = new BigInteger("0");
 
 	public static void main(String[] args) {
 		Scanner scan = new Scanner(System.in);
@@ -174,7 +175,7 @@ public class Main {
 					}
 					latch.countDown();	
 					finalResult.put(lineNum, resultList);
-					
+					totalSum.add(BigInteger.valueOf(resultList.size()));
 				}
 
 				
@@ -201,13 +202,13 @@ public class Main {
 		long duration = System.currentTimeMillis() - startTime;
 		// checking results
 		
-		BigInteger totalSum = new BigInteger("0");
+		
 
 		for (int i = 0; i < finalResult.size(); i++) {
 
 			int size = finalResult.get(String.valueOf(i + 1)).size();
 			System.out.println("\nFor row " + (i + 1) + " the answer size is " + size);
-			totalSum.add(BigInteger.valueOf(size));
+			
 		
 		}
 
