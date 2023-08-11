@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.common.collect.ImmutableMap;
 import com.opengamma.strata.basics.ReferenceData;
+import com.opengamma.strata.basics.currency.Currency;
 import com.opengamma.strata.basics.currency.CurrencyAmount;
 import com.opengamma.strata.basics.currency.Payment;
 import com.opengamma.strata.basics.date.BusinessDayAdjustment;
@@ -303,23 +304,22 @@ public class Main {
 						CurrencyAmount pvPayment = PRICER_NOMINAL.presentValue(UPFRONT_PAYMENT,
 								ZeroRateDiscountFactors.of(EUR, VAL_DATE, CURVE_REPO));
 
-						StringBuilder str = new StringBuilder();
-						str.append(computedTrade.getCurrency() + ":" + computedTrade.getAmount() + ","
-								+ computedProduct.getCurrency() + " : " + computedProduct.getAmount() + ","
-								+ pvPayment.getCurrency() + " : " + pvPayment.getAmount());
-						
-						sendToDatabase(str);
+						sendToDatabase(computedTrade.getCurrency(),computedTrade.getAmount(),
+								computedProduct.getCurrency(),computedProduct.getAmount(),
+								pvPayment.getCurrency(),pvPayment.getAmount());
 
 					}
 					latch.countDown();
 					
 				}
 
-				private void sendToDatabase(StringBuilder str) {
-
-					
+				private void sendToDatabase(Currency currency, double amount, Currency currency2, double amount2,
+						Currency currency3, double amount3) {
+					// TODO Auto-generated method stub
 					
 				}
+
+				
 
 			};
 
@@ -355,7 +355,7 @@ public class Main {
 		System.out.printf("Time taken for Entire Project with File Reading & storing results : %s ms%n",
 		System.currentTimeMillis() - projectStartTime);
 		
-	//	System.exit(0);
+		System.exit(0);
 
 	}
 
