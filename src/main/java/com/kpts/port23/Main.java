@@ -339,7 +339,7 @@ public class Main {
 							statement.executeUpdate("INSERT INTO TableForRow"+lineNum+" VALUES('"+(
 									computedTrade.getCurrency()+","+computedTrade.getAmount()+","+
 									computedProduct.getAmount()+","+pvPayment.getAmount())+"');");
-							connection.close();
+							
 						} catch (SQLException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -347,6 +347,13 @@ public class Main {
 					//	sendToDatabase(computedTrade.getCurrency(),computedTrade.getAmount(),
 					//			computedProduct.getAmount(),pvPayment.getAmount());
 						
+					}
+					
+					try {
+						connection.close();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 					latch.countDown();
 					
