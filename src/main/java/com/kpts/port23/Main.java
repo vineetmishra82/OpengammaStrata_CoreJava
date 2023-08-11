@@ -305,9 +305,9 @@ public class Main {
 						CurrencyAmount pvPayment = PRICER_NOMINAL.presentValue(UPFRONT_PAYMENT,
 								ZeroRateDiscountFactors.of(EUR, VAL_DATE, CURVE_REPO));
 
-						sendToDatabase(computedTrade.getCurrency(), computedTrade.getAmount(),
-								computedProduct.getAmount(), pvPayment.getAmount());
-
+						resultList.add(new StringBuilder(computedTrade.getCurrency() + ":" + computedTrade.getAmount() + "," + computedTrade.getCurrency() + ":"
+								+ computedProduct.getAmount() + "," + computedTrade.getCurrency() + ":" +pvPayment.getAmount()));
+					
 					}
 
 					private void sendToDatabase(Currency currency, double amount, double amount2, double amount3) {
