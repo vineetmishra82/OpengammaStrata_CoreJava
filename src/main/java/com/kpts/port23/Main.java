@@ -316,20 +316,22 @@ public class Main {
 							
 						}
 
+						latch.countDown();
 						
+						synchronized (finalResult) {
+							finalResult.put(lineNum, resultList);
+
+						}
+
 
 					}
 
 				};
 				executorService.submit(calculate);
 			
-			latch.countDown();
+		
 
-			synchronized (finalResult) {
-				finalResult.put(lineNum, resultList);
-
-			}
-
+			
 			lineNo++;
 
 		}
