@@ -294,29 +294,35 @@ public class Main {
 //					item.get("SETTLEMENT"), Double.valueOf(item.get("CLEAN_PRICE")), item.get("VAL_DATE"),
 //					String.valueOf(lineNo));
 
-			for (double i = 0; i < loopSize; i++) {
+			
 				Runnable calculate = new Runnable() {
 
 					@Override
 					public void run() {
+						
+						for (double i = 0; i < loopSize; i++) {
+							
+							CurrencyAmount computedTrade = TRADE_PRICER.presentValue(TRADE, PROVIDER);
+							CurrencyAmount computedProduct = PRODUCT_PRICER.presentValue(PRODUCT, PROVIDER);
+							CurrencyAmount pvPayment = PRICER_NOMINAL.presentValue(UPFRONT_PAYMENT,
+									ZeroRateDiscountFactors.of(EUR, VAL_DATE, CURVE_REPO));
 
-						CurrencyAmount computedTrade = TRADE_PRICER.presentValue(TRADE, PROVIDER);
-						CurrencyAmount computedProduct = PRODUCT_PRICER.presentValue(PRODUCT, PROVIDER);
-						CurrencyAmount pvPayment = PRICER_NOMINAL.presentValue(UPFRONT_PAYMENT,
-								ZeroRateDiscountFactors.of(EUR, VAL_DATE, CURVE_REPO));
-
-						synchronized (resultList) {
-							resultList
-									.add(new StringBuilder(computedTrade.getCurrency() + ":" + computedTrade.getAmount()
-											+ "," + computedTrade.getCurrency() + ":" + computedProduct.getAmount()
-											+ "," + computedTrade.getCurrency() + ":" + pvPayment.getAmount()));
+							synchronized (resultList) {
+								resultList
+										.add(new StringBuilder(computedTrade.getCurrency() + ":" + computedTrade.getAmount()
+												+ "," + computedTrade.getCurrency() + ":" + computedProduct.getAmount()
+												+ "," + computedTrade.getCurrency() + ":" + pvPayment.getAmount()));
+							}
+							
 						}
+
+						
 
 					}
 
 				};
 				executorService.submit(calculate);
-			}
+			
 			latch.countDown();
 
 			synchronized (finalResult) {
