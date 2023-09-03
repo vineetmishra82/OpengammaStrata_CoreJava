@@ -255,6 +255,8 @@ public class Main {
 			
 			latch = new CountDownLatch(rowsProcessedUpto);
 			
+			System.out.println("Rows Processed upto = "+rowsProcessedUpto);
+			
 			for(int th = 0;th<rowsProcessedUpto;th++)
 			{
 				Map<String, String> item = itemList.get(lineNo-1);
