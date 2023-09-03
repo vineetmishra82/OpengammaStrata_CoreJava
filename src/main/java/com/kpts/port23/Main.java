@@ -236,14 +236,14 @@ public class Main {
 		
 		int fileSize = itemList.size();
 		
-		int threadLoops = fileSize <= processors ? 1 : fileSize/processors;
+		int threadLoops = fileSize <= processors ? 1 : (fileSize/processors)+(fileSize%processors==0 ? 0 : 1);
 		
 		if(fileSize<=processors)
 		{
 			System.out.println("\nSince no of lines are less than available cores, only 1 cycle will be executed.."); 
 		}
 		else {
-			System.out.println("Since no of lines are more than the cores, a total of "+(fileSize/processors)+" cycles will be executed..."); 
+			System.out.println("Since no of lines are more than the cores, a total of "+threadLoops+" cycles will be executed..."); 
 		}
 		
 	
