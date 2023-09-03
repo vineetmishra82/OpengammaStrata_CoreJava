@@ -155,7 +155,7 @@ public class Main {
 				System.out.println("All rows will be read as u entered wrong");
 			}
 
-			latch = new CountDownLatch(noOfRows - 1);
+			
 
 			readLines: while ((line = buffReader.readLine()) != null) {
 				String[] values = line.split(",");
@@ -218,86 +218,97 @@ public class Main {
 			loopCount = -1;
 		}
 
-		int threadCount = 8;
-
-		System.out.print("\nNo of threads - ");
-
-		try {
-			threadCount = Integer.parseInt(scan.nextLine());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			System.out.println("Thread count is 8 only as u entered wrong");
-		} finally {
-			scan.close();
-		}
+//		int threadCount = 8;
+//
+//		System.out.print("\nNo of threads - ");
+//
+//		try {
+//			threadCount = Integer.parseInt(scan.nextLine());
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			System.out.println("Thread count is 8 only as u entered wrong");
+//		} finally {
+//			scan.close();
+//		}
 
 		int lineNo = 1;
 		long startTime = System.currentTimeMillis();
+		
+		int fileSize = itemList.size();
+		
+		int threadLoops = fileSize <= processors ? 1 : fileSize/processors;
+		
+		if(fileSize<=processors)
+		{
+			System.out.println("\nSince no of lines are less than available cores, only 1 cycle will be executed.."); 
+		}
+		else {
+			System.out.println("Since no of lines are more than the cores, a total of "+(fileSize/processors)+" cycles will be executed..."); 
+		}
+		
+	
+		int rowsProcessedUpto = fileSize <= processors ? fileSize : processors;
+		
+		for(int f = 0;f<threadLoops;f++)
+		{
+			executorService = Executors.newFixedThreadPool(processors);			
+			
+			latch = new CountDownLatch(rowsProcessedUpto);
+			
+			for(int th = 0;th<rowsProcessedUpto;th++)
+			{
+				Map<String, String> item = itemList.get(lineNo-1);
+				
+				SECURITY_ID = getSecurityID(item.get("SECURITY_SCHEME") + "," + item.get("SECURITY_VALUE"));
+				ISSUER_ID = getLegalEntityID(item.get("SECURITY_SCHEME") + "," + item.get("ISSUER_VALUE"));
+				QUANTITY = Long.valueOf(item.get("QUANTITY").replace("L", ""));
+				YIELD_CONVENTION = FixedCouponBondYieldConvention.DE_BONDS;
+				NOTIONAL = Double.valueOf(item.get("NOTIONAL"));
+				FIXED_RATE = Double.valueOf(item.get("FIXED_RATE"));
+				EUR_CALENDAR = HolidayCalendarIds.EUTA;
+				DATE_OFFSET = DaysAdjustment.ofBusinessDays(3, EUR_CALENDAR);
+				DAY_COUNT = DayCounts.ACT_365F;
+				START_DATE = getLocalDate(item.get("START_DATE"));
+				END_DATE = getLocalDate(item.get("END_DATE"));
+				SETTLEMENT = getLocalDate(item.get("SETTLEMENT"));
+				BUSINESS_ADJUST = BusinessDayAdjustment.of(BusinessDayConventions.MODIFIED_FOLLOWING, EUR_CALENDAR);
+				PERIOD_SCHEDULE = PeriodicSchedule.of(START_DATE, END_DATE, Frequency.P6M, BUSINESS_ADJUST,
+						StubConvention.SHORT_INITIAL, false);
+				EX_COUPON = DaysAdjustment.ofCalendarDays(-5, BUSINESS_ADJUST);
+				CLEAN_PRICE = Double.valueOf(item.get("CLEAN_PRICE"));
+				final LocalDate VAL_DATE = getLocalDate(item.get("VAL_DATE"));
+				final DiscountingFixedCouponBondTradePricer TRADE_PRICER = DiscountingFixedCouponBondTradePricer.DEFAULT;
+				final DiscountingFixedCouponBondProductPricer PRODUCT_PRICER = TRADE_PRICER.getProductPricer();
+				REF_DATA = ReferenceData.standard();
+				final DiscountingPaymentPricer PRICER_NOMINAL = DiscountingPaymentPricer.DEFAULT;
 
-		for (Map<String, String> item : itemList) {
+				// CalculateProduct();
 
-			// Setting opengamma variables
+				final ResolvedFixedCouponBond PRODUCT = FixedCouponBond.builder().securityId(SECURITY_ID)
+						.dayCount(DAY_COUNT).fixedRate(FIXED_RATE).legalEntityId(ISSUER_ID).currency(EUR).notional(NOTIONAL)
+						.accrualSchedule(PERIOD_SCHEDULE).settlementDateOffset(DATE_OFFSET)
+						.yieldConvention(YIELD_CONVENTION).exCouponPeriod(EX_COUPON).build().resolve(REF_DATA);
 
-			SECURITY_ID = getSecurityID(item.get("SECURITY_SCHEME") + "," + item.get("SECURITY_VALUE"));
-			ISSUER_ID = getLegalEntityID(item.get("SECURITY_SCHEME") + "," + item.get("ISSUER_VALUE"));
-			QUANTITY = Long.valueOf(item.get("QUANTITY").replace("L", ""));
-			YIELD_CONVENTION = FixedCouponBondYieldConvention.DE_BONDS;
-			NOTIONAL = Double.valueOf(item.get("NOTIONAL"));
-			FIXED_RATE = Double.valueOf(item.get("FIXED_RATE"));
-			EUR_CALENDAR = HolidayCalendarIds.EUTA;
-			DATE_OFFSET = DaysAdjustment.ofBusinessDays(3, EUR_CALENDAR);
-			DAY_COUNT = DayCounts.ACT_365F;
-			START_DATE = getLocalDate(item.get("START_DATE"));
-			END_DATE = getLocalDate(item.get("END_DATE"));
-			SETTLEMENT = getLocalDate(item.get("SETTLEMENT"));
-			BUSINESS_ADJUST = BusinessDayAdjustment.of(BusinessDayConventions.MODIFIED_FOLLOWING, EUR_CALENDAR);
-			PERIOD_SCHEDULE = PeriodicSchedule.of(START_DATE, END_DATE, Frequency.P6M, BUSINESS_ADJUST,
-					StubConvention.SHORT_INITIAL, false);
-			EX_COUPON = DaysAdjustment.ofCalendarDays(-5, BUSINESS_ADJUST);
-			CLEAN_PRICE = Double.valueOf(item.get("CLEAN_PRICE"));
-			final LocalDate VAL_DATE = getLocalDate(item.get("VAL_DATE"));
-			final DiscountingFixedCouponBondTradePricer TRADE_PRICER = DiscountingFixedCouponBondTradePricer.DEFAULT;
-			final DiscountingFixedCouponBondProductPricer PRODUCT_PRICER = TRADE_PRICER.getProductPricer();
-			REF_DATA = ReferenceData.standard();
-			final DiscountingPaymentPricer PRICER_NOMINAL = DiscountingPaymentPricer.DEFAULT;
+				DIRTY_PRICE = PRODUCT_PRICER.dirtyPriceFromCleanPrice(PRODUCT, SETTLEMENT, CLEAN_PRICE);
+				final Payment UPFRONT_PAYMENT = Payment.of(CurrencyAmount.of(EUR, -QUANTITY * NOTIONAL * DIRTY_PRICE),
+						SETTLEMENT);
+				// CalculateTrade();
+				final ResolvedFixedCouponBondTrade TRADE = ResolvedFixedCouponBondTrade.builder().product(PRODUCT)
+						.quantity(QUANTITY).settlement(ResolvedFixedCouponBondSettlement.of(SETTLEMENT, CLEAN_PRICE))
+						.build();
 
-			// CalculateProduct();
+				DiscountFactors dscRepo = ZeroRateDiscountFactors.of(EUR, VAL_DATE, CURVE_REPO);
+				DiscountFactors dscIssuer = ZeroRateDiscountFactors.of(EUR, VAL_DATE, CURVE_ISSUER);
+				final LegalEntityDiscountingProvider PROVIDER = ImmutableLegalEntityDiscountingProvider.builder()
+						.issuerCurves(ImmutableMap.of(Pair.of(GROUP_ISSUER, EUR), dscIssuer))
+						.issuerCurveGroups(ImmutableMap.of(ISSUER_ID, GROUP_ISSUER))
+						.repoCurves(ImmutableMap.of(Pair.of(GROUP_REPO, EUR), dscRepo))
+						.repoCurveSecurityGroups(ImmutableMap.of(SECURITY_ID, GROUP_REPO)).valuationDate(VAL_DATE).build();
 
-			final ResolvedFixedCouponBond PRODUCT = FixedCouponBond.builder().securityId(SECURITY_ID)
-					.dayCount(DAY_COUNT).fixedRate(FIXED_RATE).legalEntityId(ISSUER_ID).currency(EUR).notional(NOTIONAL)
-					.accrualSchedule(PERIOD_SCHEDULE).settlementDateOffset(DATE_OFFSET)
-					.yieldConvention(YIELD_CONVENTION).exCouponPeriod(EX_COUPON).build().resolve(REF_DATA);
+				final String lineNum = String.valueOf(lineNo);
+				List<StringBuilder> resultList = new ArrayList<StringBuilder>();
 
-			DIRTY_PRICE = PRODUCT_PRICER.dirtyPriceFromCleanPrice(PRODUCT, SETTLEMENT, CLEAN_PRICE);
-			final Payment UPFRONT_PAYMENT = Payment.of(CurrencyAmount.of(EUR, -QUANTITY * NOTIONAL * DIRTY_PRICE),
-					SETTLEMENT);
-			// CalculateTrade();
-			final ResolvedFixedCouponBondTrade TRADE = ResolvedFixedCouponBondTrade.builder().product(PRODUCT)
-					.quantity(QUANTITY).settlement(ResolvedFixedCouponBondSettlement.of(SETTLEMENT, CLEAN_PRICE))
-					.build();
-
-			DiscountFactors dscRepo = ZeroRateDiscountFactors.of(EUR, VAL_DATE, CURVE_REPO);
-			DiscountFactors dscIssuer = ZeroRateDiscountFactors.of(EUR, VAL_DATE, CURVE_ISSUER);
-			final LegalEntityDiscountingProvider PROVIDER = ImmutableLegalEntityDiscountingProvider.builder()
-					.issuerCurves(ImmutableMap.of(Pair.of(GROUP_ISSUER, EUR), dscIssuer))
-					.issuerCurveGroups(ImmutableMap.of(ISSUER_ID, GROUP_ISSUER))
-					.repoCurves(ImmutableMap.of(Pair.of(GROUP_REPO, EUR), dscRepo))
-					.repoCurveSecurityGroups(ImmutableMap.of(SECURITY_ID, GROUP_REPO)).valuationDate(VAL_DATE).build();
-
-			final String lineNum = String.valueOf(lineNo);
-			List<StringBuilder> resultList = new ArrayList<StringBuilder>();
-
-			double loopSize = loopCount == -1 ? Double.valueOf(item.get("Loops")) : loopCount;
-
-			executorService = Executors.newFixedThreadPool(threadCount);
-
-//			Product product = new Product(item.get("SECURITY_SCHEME") + "," + item.get("SECURITY_VALUE"),
-//					item.get("SECURITY_SCHEME") + "," + item.get("ISSUER_VALUE"),
-//					Long.valueOf(item.get("QUANTITY").replace("L", "")), Double.valueOf(item.get("NOTIONAL")),
-//					Double.valueOf(item.get("FIXED_RATE")), item.get("START_DATE"), item.get("END_DATE"),
-//					item.get("SETTLEMENT"), Double.valueOf(item.get("CLEAN_PRICE")), item.get("VAL_DATE"),
-//					String.valueOf(lineNo));
-
+				double loopSize = loopCount == -1 ? Double.valueOf(item.get("Loops")) : loopCount;
 			
 				Runnable calculate = new Runnable() {
 
@@ -332,22 +343,139 @@ public class Main {
 
 				};
 				executorService.submit(calculate);
+				
+				lineNo++;
+			}
 			
-		
+			executorService.shutdown();
 
+			try {
+				latch.await();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
-			lineNo++;
-
+			System.out.println("Processed "+rowsProcessedUpto+" rows from file....");
+			
+			rowsProcessedUpto = fileSize-lineNo >= processors ? processors : fileSize-lineNo;
+			
+			
 		}
-
-		executorService.shutdown();
-
-		try {
-			latch.await();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		for (Map<String, String> item : itemList) {
+//
+//			// Setting opengamma variables
+//
+//			SECURITY_ID = getSecurityID(item.get("SECURITY_SCHEME") + "," + item.get("SECURITY_VALUE"));
+//			ISSUER_ID = getLegalEntityID(item.get("SECURITY_SCHEME") + "," + item.get("ISSUER_VALUE"));
+//			QUANTITY = Long.valueOf(item.get("QUANTITY").replace("L", ""));
+//			YIELD_CONVENTION = FixedCouponBondYieldConvention.DE_BONDS;
+//			NOTIONAL = Double.valueOf(item.get("NOTIONAL"));
+//			FIXED_RATE = Double.valueOf(item.get("FIXED_RATE"));
+//			EUR_CALENDAR = HolidayCalendarIds.EUTA;
+//			DATE_OFFSET = DaysAdjustment.ofBusinessDays(3, EUR_CALENDAR);
+//			DAY_COUNT = DayCounts.ACT_365F;
+//			START_DATE = getLocalDate(item.get("START_DATE"));
+//			END_DATE = getLocalDate(item.get("END_DATE"));
+//			SETTLEMENT = getLocalDate(item.get("SETTLEMENT"));
+//			BUSINESS_ADJUST = BusinessDayAdjustment.of(BusinessDayConventions.MODIFIED_FOLLOWING, EUR_CALENDAR);
+//			PERIOD_SCHEDULE = PeriodicSchedule.of(START_DATE, END_DATE, Frequency.P6M, BUSINESS_ADJUST,
+//					StubConvention.SHORT_INITIAL, false);
+//			EX_COUPON = DaysAdjustment.ofCalendarDays(-5, BUSINESS_ADJUST);
+//			CLEAN_PRICE = Double.valueOf(item.get("CLEAN_PRICE"));
+//			final LocalDate VAL_DATE = getLocalDate(item.get("VAL_DATE"));
+//			final DiscountingFixedCouponBondTradePricer TRADE_PRICER = DiscountingFixedCouponBondTradePricer.DEFAULT;
+//			final DiscountingFixedCouponBondProductPricer PRODUCT_PRICER = TRADE_PRICER.getProductPricer();
+//			REF_DATA = ReferenceData.standard();
+//			final DiscountingPaymentPricer PRICER_NOMINAL = DiscountingPaymentPricer.DEFAULT;
+//
+//			// CalculateProduct();
+//
+//			final ResolvedFixedCouponBond PRODUCT = FixedCouponBond.builder().securityId(SECURITY_ID)
+//					.dayCount(DAY_COUNT).fixedRate(FIXED_RATE).legalEntityId(ISSUER_ID).currency(EUR).notional(NOTIONAL)
+//					.accrualSchedule(PERIOD_SCHEDULE).settlementDateOffset(DATE_OFFSET)
+//					.yieldConvention(YIELD_CONVENTION).exCouponPeriod(EX_COUPON).build().resolve(REF_DATA);
+//
+//			DIRTY_PRICE = PRODUCT_PRICER.dirtyPriceFromCleanPrice(PRODUCT, SETTLEMENT, CLEAN_PRICE);
+//			final Payment UPFRONT_PAYMENT = Payment.of(CurrencyAmount.of(EUR, -QUANTITY * NOTIONAL * DIRTY_PRICE),
+//					SETTLEMENT);
+//			// CalculateTrade();
+//			final ResolvedFixedCouponBondTrade TRADE = ResolvedFixedCouponBondTrade.builder().product(PRODUCT)
+//					.quantity(QUANTITY).settlement(ResolvedFixedCouponBondSettlement.of(SETTLEMENT, CLEAN_PRICE))
+//					.build();
+//
+//			DiscountFactors dscRepo = ZeroRateDiscountFactors.of(EUR, VAL_DATE, CURVE_REPO);
+//			DiscountFactors dscIssuer = ZeroRateDiscountFactors.of(EUR, VAL_DATE, CURVE_ISSUER);
+//			final LegalEntityDiscountingProvider PROVIDER = ImmutableLegalEntityDiscountingProvider.builder()
+//					.issuerCurves(ImmutableMap.of(Pair.of(GROUP_ISSUER, EUR), dscIssuer))
+//					.issuerCurveGroups(ImmutableMap.of(ISSUER_ID, GROUP_ISSUER))
+//					.repoCurves(ImmutableMap.of(Pair.of(GROUP_REPO, EUR), dscRepo))
+//					.repoCurveSecurityGroups(ImmutableMap.of(SECURITY_ID, GROUP_REPO)).valuationDate(VAL_DATE).build();
+//
+//			final String lineNum = String.valueOf(lineNo);
+//			List<StringBuilder> resultList = new ArrayList<StringBuilder>();
+//
+//			double loopSize = loopCount == -1 ? Double.valueOf(item.get("Loops")) : loopCount;
+//
+//			executorService = Executors.newFixedThreadPool(threadCount);
+//
+////			Product product = new Product(item.get("SECURITY_SCHEME") + "," + item.get("SECURITY_VALUE"),
+////					item.get("SECURITY_SCHEME") + "," + item.get("ISSUER_VALUE"),
+////					Long.valueOf(item.get("QUANTITY").replace("L", "")), Double.valueOf(item.get("NOTIONAL")),
+////					Double.valueOf(item.get("FIXED_RATE")), item.get("START_DATE"), item.get("END_DATE"),
+////					item.get("SETTLEMENT"), Double.valueOf(item.get("CLEAN_PRICE")), item.get("VAL_DATE"),
+////					String.valueOf(lineNo));
+//
+//			
+//				Runnable calculate = new Runnable() {
+//
+//					@Override
+//					public void run() {
+//						
+//						for (double i = 0; i < loopSize; i++) {
+//							
+//							CurrencyAmount computedTrade = TRADE_PRICER.presentValue(TRADE, PROVIDER);
+//							CurrencyAmount computedProduct = PRODUCT_PRICER.presentValue(PRODUCT, PROVIDER);
+//							CurrencyAmount pvPayment = PRICER_NOMINAL.presentValue(UPFRONT_PAYMENT,
+//									ZeroRateDiscountFactors.of(EUR, VAL_DATE, CURVE_REPO));
+//
+//							synchronized (resultList) {
+//								resultList
+//										.add(new StringBuilder(computedTrade.getCurrency() + ":" + computedTrade.getAmount()
+//												+ "," + computedTrade.getCurrency() + ":" + computedProduct.getAmount()
+//												+ "," + computedTrade.getCurrency() + ":" + pvPayment.getAmount()));
+//							}
+//							
+//						}
+//
+//						latch.countDown();
+//						
+//						synchronized (finalResult) {
+//							finalResult.put(lineNum, resultList);
+//
+//						}
+//
+//
+//					}
+//
+//				};
+//				executorService.submit(calculate);
+//			
+//		
+//
+//			
+//			lineNo++;
+//
+//		}
+//
+//		executorService.shutdown();
+//
+//		try {
+//			latch.await();
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 		long duration = System.currentTimeMillis() - startTime;
 		// checking results
