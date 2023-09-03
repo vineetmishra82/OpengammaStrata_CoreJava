@@ -76,6 +76,7 @@ public class Main {
 	static double loopCount = -1;
 	static CountDownLatch latch;
 	static BigInteger totalSum = new BigInteger("0");
+	
 
 	public static void main(String[] args) {
 		// Opengamma variables
@@ -120,6 +121,9 @@ public class Main {
 
 		List<Map<String, String>> itemList = new ArrayList<Map<String, String>>();
 		System.out.println("Running strata project");
+		
+		int processors = Runtime.getRuntime ().availableProcessors();
+		System.out.println("No of cores detected - "+processors);
 
 		try {
 			FileReader fileReader = new FileReader(args[0]);
