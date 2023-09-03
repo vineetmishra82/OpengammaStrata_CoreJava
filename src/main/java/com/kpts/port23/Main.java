@@ -339,12 +339,23 @@ public class Main {
 							finalResult.put(lineNum, resultList);
 
 						}
+						
+						try {
+							Thread.sleep(10);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 
 
 					}
 
 				};
+				
 				executorService.submit(calculate);
+				
+			
+				
 				
 				lineNo++;
 			}
