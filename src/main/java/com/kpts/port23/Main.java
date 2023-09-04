@@ -236,7 +236,7 @@ public class Main {
 		
 		int fileSize = itemList.size();
 		
-		executorService = Executors.newFixedThreadPool(fileSize);			
+		executorService = Executors.newFixedThreadPool(processors);			
 			
 		latch = new CountDownLatch(fileSize);
 	
