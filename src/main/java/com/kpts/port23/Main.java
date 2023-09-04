@@ -236,28 +236,11 @@ public class Main {
 		
 		int fileSize = itemList.size();
 		
-		int threadLoops = fileSize <= processors ? 1 : (fileSize/processors)+(fileSize%processors==0 ? 0 : 1);
-		
-		if(fileSize<=processors)
-		{
-			System.out.println("\nSince no of lines are less than available cores, only 1 cycle will be executed.."); 
-		}
-		else {
-			System.out.println("Since no of lines are more than the cores, a total of "+threadLoops+" cycles will be executed..."); 
-		}
-		
+		executorService = Executors.newFixedThreadPool(fileSize);			
+			
+		latch = new CountDownLatch(fileSize);
 	
-		int rowsProcessedUpto = fileSize <= processors ? fileSize : processors;
-		
-		for(int f = 0;f<threadLoops;f++)
-		{
-			executorService = Executors.newFixedThreadPool(processors);			
-			
-			latch = new CountDownLatch(rowsProcessedUpto);
-			
-			System.out.println("Rows Processed upto = "+rowsProcessedUpto);
-			
-			for(int th = 0;th<rowsProcessedUpto;th++)
+		for(int th = 0;th<fileSize;th++)
 			{
 				Map<String, String> item = itemList.get(lineNo-1);
 				
@@ -341,7 +324,10 @@ public class Main {
 						}
 						
 						try {
-							Thread.sleep(500);
+							Thread.sleep(100);
+							
+							System.out.println("Processed "+lineNum+" row out of "+fileSize);
+							
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -368,13 +354,8 @@ public class Main {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+				
 			
-			System.out.println("Processed "+rowsProcessedUpto+" rows from file....");
-			
-			rowsProcessedUpto = fileSize-lineNo >= processors ? processors : fileSize-lineNo;
-			
-			
-		}
 //		for (Map<String, String> item : itemList) {
 //
 //			// Setting opengamma variables
